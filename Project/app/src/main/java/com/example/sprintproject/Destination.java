@@ -9,6 +9,7 @@ public class Destination extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.destination);
         setContentView(R.layout.activity_main);
     }
 }
