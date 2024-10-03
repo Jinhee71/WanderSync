@@ -3,5 +3,16 @@
     <style name="Base.Theme.SprintProject" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="android:statusBarColor">@color/white</item>
+
+
+        <!-- Set the window splash screen background -->
+        <item name="android:windowSplashScreenBackground">@color/white</item>
+
+
+        <!-- Set the window splash screen icon -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/wanderlogo</item>
+
     </style>
 </resources>
