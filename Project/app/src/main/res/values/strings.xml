@@ -4,4 +4,9 @@
     <string name="community_engagement">Community Engagement</string>
     <string name="accommodations">Accommodations</string>
     <string name="logistics">Logistics</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="wanderSync">WanderSync!</string>
+    <string name="app_version">version beta</string>
+    <string name="Start">Start</string>
+    <string name="quit">Quit</string>
 </resources>
