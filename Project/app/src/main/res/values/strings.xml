@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SprintProject</string>
     <string name="destination">Destination</string>
-    <string name="community_engagement">Community Engagement</string>
+    <string name="travel_community">Travel Community</string>
     <string name="accommodations">Accommodations</string>
     <string name="logistics">Logistics</string>
     <string name="dining">Dining</string>
