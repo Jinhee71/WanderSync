@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">SprintProject</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="destination">Destination</string>
+    <string name="travel_community">Travel Community</string>
+    <string name="accommodations">Accommodations</string>
+    <string name="logistics">Logistics</string>
+    <string name="dining">Dining</string>
+    <string name="transportation">Transportation</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="wanderSync">WanderSync!</string>
+    <string name="app_version">version beta</string>
+    <string name="Start">Start</string>
+    <string name="quit">Quit</string>
 </resources>
