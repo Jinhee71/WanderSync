@@ -1,6 +1,8 @@
 package com.example.sprintproject.view;
+import com.example.sprintproject.R;
+import com.example.sprintproject.model.User;
+import com.example.sprintproject.viewmodel.CreateAccountViewModel;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,55 +12,54 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-
-import com.example.sprintproject.R;
-import com.example.sprintproject.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.example.sprintproject.viewmodel.userViewModel;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 public class AccountCreationActivity extends AppCompatActivity {
 
-    private userViewModel userViewModel;
+    private CreateAccountViewModel CreateAccountViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_creation);
 
+        EditText usernameEditText = findViewById(R.id.username_edittext);
+        EditText passwordEditText = findViewById(R.id.password_edittext);
         Button registerButton = findViewById(R.id.register_button);
         Button loginButton = findViewById(R.id.login_button);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        CreateAccountViewModel = new ViewModelProvider(this).get(CreateAccountViewModel.class);
 
-        EditText usernameEditText = findViewById(R.id.username_edittext);
-        EditText passwordEditText = findViewById(R.id.password_edittext);
+        // Observe the LiveData from the ViewModel
+        CreateAccountViewModel.isAccountCreated().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isCreated) {
+                if (isCreated) {
+                    Toast.makeText(AccountCreationActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AccountCreationActivity.this, CreateAccountViewModel.getMessage().getValue(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = new User();
-                user.setUsername(usernameEditText.getText().toString().trim());
-                user.setPassword(passwordEditText.getText().toString().trim());
-                userViewModel.register(user);
+                String username = usernameEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+
+                if (username.isEmpty() || username.contains(" ")) {
+                    Toast.makeText(AccountCreationActivity.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
+                } else if (password.isEmpty() || password.contains(" ")) {
+                    Toast.makeText(AccountCreationActivity.this, "Please enter a valid password", Toast.LENGTH_SHORT).show();
+                } else {
+                    User user = new User(username, password);
+                    CreateAccountViewModel.createUser(user);
+                }
             }
         });
 
-        /*
-        // Navigate to a different activity on Login Button click
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AccountCreationActivity.this, SecondActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-         */
+        // You can implement login button functionality as needed
     }
 }
