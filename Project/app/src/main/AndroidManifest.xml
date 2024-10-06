@@ -29,6 +29,9 @@
         <activity
             android:name=".view.AccountCreationActivity">
         </activity>
+        <activity
+            android:name=".view.LoginActivity">
+        </activity>
     </application>
 
 
