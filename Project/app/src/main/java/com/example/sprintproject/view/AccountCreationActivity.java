@@ -45,9 +45,9 @@ public class AccountCreationActivity extends AppCompatActivity {
                 username = usernameEditText.getText().toString().trim();
                 password = passwordEditText.getText().toString().trim();
                 if (username.isEmpty() || username.contains(" ")) {
-                    Toast.makeText(AccountCreationActivity.this, "Please enter a valid username.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountCreationActivity.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
                 } else if (password.isEmpty() || password.contains(" ")) {
-                    Toast.makeText(AccountCreationActivity.this, "Please enter a valid password.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountCreationActivity.this, "Please enter a valid password", Toast.LENGTH_SHORT).show();
                 } else {
                     username = username + "@gmail.com";
                     mAuth.createUserWithEmailAndPassword(username, password)
@@ -58,10 +58,11 @@ public class AccountCreationActivity extends AppCompatActivity {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d("success", "createUserWithEmail:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
+                                        Toast.makeText(AccountCreationActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
                                     } else {
                                         // If sign in fails, display a message to the user.
-                                        Log.w("success", "createUserWithEmail:failure", task.getException());
-                                        Toast.makeText(AccountCreationActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                        Log.w("failure", "createUserWithEmail:failure", task.getException());
+                                        Toast.makeText(AccountCreationActivity.this, "Account already exists", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
