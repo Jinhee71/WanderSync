@@ -69,6 +69,7 @@
 
     <!-- Create an Account Button -->
     <Button
+        android:id="@+id/create_button"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="Create an Account"
