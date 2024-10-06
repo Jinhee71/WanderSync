@@ -13,10 +13,11 @@ import com.example.sprintproject.R;
 
 public class DiningFragment extends Fragment {
 
-    public DiningFragment(){}
+    public DiningFragment() { }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dining, container, false);
     }
 }
