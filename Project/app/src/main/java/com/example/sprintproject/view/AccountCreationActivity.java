@@ -3,6 +3,7 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.User;
 import com.example.sprintproject.viewmodel.CreateAccountViewModel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,7 +60,14 @@ public class AccountCreationActivity extends AppCompatActivity {
                 }
             }
         });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccountCreationActivity.this, SecondActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        // You can implement login button functionality as needed
+
     }
 }
