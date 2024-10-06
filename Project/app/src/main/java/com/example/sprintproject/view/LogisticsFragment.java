@@ -1,17 +1,18 @@
-package com.example.sprintproject;
+package com.example.sprintproject.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.*;
 import androidx.fragment.app.Fragment;
+
+import com.example.sprintproject.R;
 
 public class LogisticsFragment extends Fragment {
 
-    public LogisticsFragment(){
-        // require a empty public constructor
+    public LogisticsFragment() {
+        // Required empty public constructor
     }
 
     @Override
