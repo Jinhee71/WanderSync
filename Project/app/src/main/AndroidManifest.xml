@@ -28,6 +28,9 @@
             android:name=".view.SecondActivity"
             android:exported="true" />
         <activity android:name=".view.AccountCreationActivity"></activity>
+        <activity
+            android:name=".view.LoginActivity">
+        </activity>
     </application>
 
 </manifest>
