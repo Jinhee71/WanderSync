@@ -54,6 +54,8 @@ public class AccountCreationActivity extends AppCompatActivity {
                     Toast.makeText(AccountCreationActivity.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
                 } else if (password.isEmpty() || password.contains(" ")) {
                     Toast.makeText(AccountCreationActivity.this, "Please enter a valid password", Toast.LENGTH_SHORT).show();
+                } else if (password.length() <= 6) {
+                    Toast.makeText(AccountCreationActivity.this, "Please enter a password with at least 7 characters", Toast.LENGTH_SHORT).show();
                 } else {
                     User user = new User(username, password);
                     CreateAccountViewModel.createUser(user);
