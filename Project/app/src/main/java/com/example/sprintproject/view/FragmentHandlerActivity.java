@@ -8,18 +8,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sprintproject.R;
-import com.example.sprintproject.WSBotNavView;
 
 public class FragmentHandlerActivity extends AppCompatActivity {
 
-    WSBotNavView botNavView;
+    private WSBotNavView botNavView;
 
-    LogisticsFragment logisticsFragment = new LogisticsFragment();
-    DestinationFragment destinationFragment = new DestinationFragment();
-    DiningFragment diningFragment = new DiningFragment();
-    AccommodationFragment accommodationFragment = new AccommodationFragment();
-    TransportationFragment transportationFragment = new TransportationFragment();
-    CommunityFragment communityFragment = new CommunityFragment();
+    private LogisticsFragment logisticsFragment = new LogisticsFragment();
+    private DestinationFragment destinationFragment = new DestinationFragment();
+    private DiningFragment diningFragment = new DiningFragment();
+    private AccommodationFragment accommodationFragment = new AccommodationFragment();
+    private TransportationFragment transportationFragment = new TransportationFragment();
+    private CommunityFragment communityFragment = new CommunityFragment();
 
 
     @Override
@@ -31,33 +30,35 @@ public class FragmentHandlerActivity extends AppCompatActivity {
         botNavView = findViewById(R.id.bottom_nav);
         botNavView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFL, logisticsFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFL,
+                logisticsFragment).commit();
 
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_logistics) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL, logisticsFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL,
+                    logisticsFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.nav_destination) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL, destinationFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL,
+                    destinationFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.nav_dining) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL, diningFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL,
+                    diningFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.nav_accommodation) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL, accommodationFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL,
+                    accommodationFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.nav_transportation) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL, transportationFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL,
+                    transportationFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.nav_community) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL, communityFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFL,
+                    communityFragment).commit();
             return true;
         }
 

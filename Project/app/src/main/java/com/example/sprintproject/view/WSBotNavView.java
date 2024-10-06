@@ -1,4 +1,4 @@
-package com.example.sprintproject;
+package com.example.sprintproject.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -22,7 +22,8 @@ public class WSBotNavView extends BottomNavigationView {
         super(context, attrs, defStyleAttr);
     }
 
-    public WSBotNavView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public WSBotNavView(@NonNull Context context, @Nullable AttributeSet attrs,
+                        int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
