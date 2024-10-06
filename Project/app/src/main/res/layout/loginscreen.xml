@@ -35,6 +35,7 @@
             android:layout_marginBottom="4dp"/>
 
         <EditText
+            android:id="@+id/usernameEditText"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:hint="Enter Username"
@@ -51,6 +52,7 @@
             android:layout_marginBottom="4dp"/>
 
         <EditText
+            android:id="@+id/passwordEditText"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:hint="Enter Password"
@@ -60,29 +62,34 @@
 
     <!-- Login Button -->
     <Button
+        android:id="@+id/loginButton"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:background="#B0B0B0"
+        android:background="#671994"
         android:textColor="#FFFFFF"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:clickable="true"/>
 
     <!-- Create an Account Button -->
     <Button
-        android:id="@+id/create_button"
+        android:id="@+id/createAccountButton"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="Create an Account"
-        android:background="#B0B0B0"
+        android:background="#671994"
         android:textColor="#FFFFFF"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:clickable="true"/>
 
-    <!-- quit button -->
+    <!-- Quit Button -->
     <Button
+        android:id="@+id/quitButton"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="Quit"
-        android:background="#B0B0B0"
-        android:textColor="#FFFFFF"/>
+        android:background="#671994"
+        android:textColor="#FFFFFF"
+        android:clickable="true"/>
 
 </LinearLayout>
