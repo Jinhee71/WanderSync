@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Login successful, show a message and navigate to SecondActivity
                     // SecondActivity.class should be changed to navbarscreen
                     Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, SecondActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, FragmentHandlerActivity.class);
                     startActivity(intent);
                     finish(); // Optionally finish the current activity so it's removed from the back stack
                 }
