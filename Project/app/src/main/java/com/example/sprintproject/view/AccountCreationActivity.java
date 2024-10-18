@@ -62,7 +62,7 @@ public class AccountCreationActivity extends AppCompatActivity {
                             "Please enter a password with at least 7 characters",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    User user = new User(username, password);
+                    User user = new User(username, password, null, null, 0);
                     createAccountViewModel.createUser(user);
 
                     Intent intent = new Intent(AccountCreationActivity.this, LoginActivity.class);
