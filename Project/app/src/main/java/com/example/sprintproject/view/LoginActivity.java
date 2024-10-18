@@ -17,8 +17,11 @@ import com.example.sprintproject.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText usernameEditText, passwordEditText;
-    private Button loginButton, createAccountButton, quitButton;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private Button createAccountButton;
+    private Button quitButton;
     private LoginViewModel loginViewModel;
 
     @Override
@@ -71,10 +74,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (firebaseUser != null) {
                     // Login successful, show a message and navigate to SecondActivity
                     // SecondActivity.class should be changed to navbarscreen
-                    Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login successful!",
+                            Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, FragmentHandlerActivity.class);
                     startActivity(intent);
-                    finish(); // Optionally finish the current activity so it's removed from the back stack
+                    finish();
                 }
             }
         });
@@ -84,7 +88,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(String error) {
                 if (!TextUtils.isEmpty(error)) {
-                    Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, error,
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });

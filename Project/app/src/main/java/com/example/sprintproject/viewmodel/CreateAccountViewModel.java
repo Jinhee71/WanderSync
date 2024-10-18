@@ -44,7 +44,8 @@ public class CreateAccountViewModel extends ViewModel {
                             message.setValue("Account successfully created.");
                         } else {
                             isAccountCreated.setValue(false);
-                            message.setValue("Account already exists: " + task.getException().getMessage());
+                            message.setValue("Account already exists: "
+                                    + task.getException().getMessage());
                         }
                     }
                 });
