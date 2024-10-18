@@ -31,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                Intent intent = new Intent(MainActivity.this, FragmentHandlerActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                // Uncomment when bypassing login page for testing:
+                // Intent intent = new Intent(MainActivity.this, FragmentHandlerActivity.class);
                 startActivity(intent);
             }
         });
