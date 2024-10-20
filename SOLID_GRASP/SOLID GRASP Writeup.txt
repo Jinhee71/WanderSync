@@ -25,3 +25,6 @@ The design utilizes the Information Expert principle by ensuring that methods ar
 
 7. Potential Limitations
 We tried to follow GRASP/SOLID as best as possible, but unfortunately, TeamMember required coupling to Project functions because Project controls who is on what team. Therefore, we need to call Project functions from inside the TeamMember class. 
+
+
+Collaborators: Sebastian Morgenstern, Jinhee Lee, Brian Yang, Hyeonjae Kim, Joseph Seo, Yasha Rachacha 
