@@ -1,0 +1,30 @@
+1. Single Responsibility Principle (SRP)
+
+Each class has a distinct responsibility, ensuring that changes in one part of the system have minimal impact on others, meaning that we follow SRP. The Project class is solely responsible for managing tasks and team members, while the Task class handles task-specific attributes and behaviors. This separation of concerns makes the codebase easier to understand and modify, allowing developers to work on individual components without affecting the entire system.
+
+2. Open/Closed Principle (OCP)
+
+Our design is open for extension but closed for modification. The Task class is abstract, allowing for the creation of specialized task types (like RecurringTask) without altering existing code. This means our design facilitates the addition of new task types as requirements evolve, promoting extensibility, but still having future editing of the base code closed (therefore, open to extension, closed to modification).
+
+3. Liskov Substitution Principle (LSP)
+
+All derived classes from Task can be used interchangeably with the Task class without affecting the correctness of the program, therefore following LSP. Whether a task is a RecurringTask or a standard Task, it can be treated as a Task in any context, ensuring that the system behaves consistently. This principle encourages the proper use of inheritance and polymorphism.
+
+4. Interface Segregation Principle (ISP)
+
+The TaskInterface follows ISP because it provides a clear contract for task-related behaviors without forcing any implementing class to depend on methods it does not use. For instance, if a class needs to implement task behaviors, it only implements the relevant methods defined in TaskInterface. This keeps the interface focused, reducing unnecessary dependencies and promoting flexibility.
+
+5. Creator Responsibility
+
+According to the Creator principle in GRASP, classes should be responsible for creating instances of classes that they contain. We follow this because, in our design, the Project class is responsible for creating Task instances and managing TeamMember instances. This encapsulation of creation logic helps keep the responsibility clear and aligns with the overall structure of the system.
+
+6. Information Expert
+
+The design utilizes the Information Expert principle by ensuring that methods are defined within the classes that have the necessary information to fulfill their responsibilities. We follow this because functionality is segregated based on the data available to each class. For example, Task manages setting its status in priority, while Project controls the information available to it, and so on.
+
+
+7. Potential Limitations
+We tried to follow GRASP/SOLID as best as possible, but unfortunately, TeamMember required coupling to Project functions because Project controls who is on what team. Therefore, we need to call Project functions from inside the TeamMember class. 
+
+
+Collaborators: Sebastian Morgenstern, Jinhee Lee, Brian Yang, Hyeonjae Kim, Joseph Seo, Yasha Rachacha 

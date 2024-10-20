@@ -2,6 +2,8 @@ package com.example.sprintproject.view;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -63,5 +65,23 @@ public class FragmentHandlerActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public void onLogisticsDisplayDataClick(View v) {
+        logisticsFragment.onDisplayDataClick(v);
+        Toast.makeText(v.getContext(), "Display Data Button Clicked!",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    public void onLogisticsAddNoteButtonClick(View v) {
+        logisticsFragment.onAddNoteButtonClick(v);
+        Toast.makeText(v.getContext(), "Add Note Button Clicked!",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    public void addLogisticsCollaboratorButtonClick(View v) {
+        logisticsFragment.addCollaboratorButtonClick(v);
+        Toast.makeText(v.getContext(), "Add Collaborator Button Clicked!",
+                Toast.LENGTH_SHORT).show();
     }
 }

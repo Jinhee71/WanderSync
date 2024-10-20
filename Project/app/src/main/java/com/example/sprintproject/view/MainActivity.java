@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.example.sprintproject.R;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                // Uncomment when bypassing login page for testing:
+                // Intent intent = new Intent(MainActivity.this, FragmentHandlerActivity.class);
                 startActivity(intent);
             }
         });
