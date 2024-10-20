@@ -3,9 +3,23 @@ import java.util.Date;
 import java.util.List;
 
 
+class Main {
+    public static void main(String[] args) {
+        // put here so code compiles
+        return;
+    }
+}
+
+
+interface TaskInterface {
+    void updateStatus(String status);
+    void updatePriority(String priority);
+}
+
+
 // Task as the generic function of the class
 // - abstract to allow for further specialization
-abstract class Task {
+abstract class Task implements TaskInterface {
     private String title;
     private String description;
     private Date dueDate;
@@ -44,7 +58,7 @@ abstract class Task {
         this.title = newTitle;
     }
 
-    public void gsetDescription(String newDescription) {
+    public void setDescription(String newDescription) {
         this.description = newDescription;
     }
 
@@ -52,13 +66,25 @@ abstract class Task {
         this.dueDate = newDueDate;
     }
 
-    public void getStatus(String newStatus) {
+    public void updateStatus(String newStatus) {
         this.status = newStatus;
     }
 
-    public void getPriority(String newPriority) {
+    public void updatePriority(String newPriority) {
         this.priority = newPriority;
     }
+}
+
+
+class RecurringTask extends Task {
+    private String recurrencePattern;
+
+    public RecurringTask(String title, String description, Date dueDate, String status, String priority, String recurrencePattern) {
+        super(title, description, dueDate, status, priority);
+        this.recurrencePattern = recurrencePattern;
+    }
+
+    // Additional methods specific to RecurringTask can be added here
 }
 
 
