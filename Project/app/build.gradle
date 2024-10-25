@@ -47,6 +47,10 @@ dependencies {
 
     // Data Binding (optional, but recommended for MVVM)
     implementation "androidx.databinding:databinding-runtime:7.3.0"
+
+    //Chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
