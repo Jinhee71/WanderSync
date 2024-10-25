@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class DestinationViewModel extends ViewModel {
+
     private DestinationList destinationList;
 
     public DestinationViewModel() {
@@ -28,6 +29,8 @@ public class DestinationViewModel extends ViewModel {
             return false;  // Return false if input validation fails
         }
         Destination destination = new Destination(location, startDate, endDate);
+        //part for upadating firebase
+
         destinationList.addDestination(destination);
         return true;
     }
