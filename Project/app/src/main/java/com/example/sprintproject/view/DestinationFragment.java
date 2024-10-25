@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -29,6 +30,11 @@ import java.time.format.DateTimeParseException;
 
 
 public class DestinationFragment extends Fragment {
+
+    private DestinationViewModel destinationViewModel; // ViewModel for managing data
+    private RecyclerView recyclerView; // RecyclerView to display destinations
+    private DestinationAdapter adapter; // Adapter to bind data to RecyclerView
+    private EditText etLocation, etStartDate, etEndDate; // Form fields
 
     private DestinationViewModel viewModel;
     private EditText locationInput, startDateInput, endDateInput;
@@ -57,6 +63,16 @@ public class DestinationFragment extends Fragment {
         //layouts
         formLogTravel = rootView.findViewById(R.id.form_log_travel);
         LinearLayout calculateAndListLayout = rootView.findViewById(R.id.calculateButton_and_list_layout);
+        recyclerView = rootView.findViewById(R.id.rv_destinations);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Observe the data from ViewModel
+        //seems this is the problem
+//        destinationViewModel.getDestinations().observe(getViewLifecycleOwner(), destinations -> {
+//            // Initialize and set the adapter
+//            adapter = new DestinationAdapter(destinations);
+//            recyclerView.setAdapter(adapter);
+//        });
 
         // Set the initial height of the Travel Log Form to 1dp
         //wanted to do 0dp but not worked.
@@ -78,6 +94,8 @@ public class DestinationFragment extends Fragment {
                 toggleFormHeight();  // Call the same method to toggle the form's height
             }
         });
+
+
 
         // Submit button click listener
         submitButton.setOnClickListener(v -> {
@@ -106,11 +124,6 @@ public class DestinationFragment extends Fragment {
                 if (addedSuccessfully) {
                     Toast.makeText(getContext(), "Destination added successfully!", Toast.LENGTH_SHORT).show();
 
-
-
-
-
-
                 } else {
                     Toast.makeText(getContext(), "Error adding destination", Toast.LENGTH_SHORT).show();
                 }
@@ -118,9 +131,6 @@ public class DestinationFragment extends Fragment {
                 Toast.makeText(getContext(), "Invalid date format. Use yyyy-MM-dd.", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
 
 
         return rootView;
@@ -139,6 +149,8 @@ public class DestinationFragment extends Fragment {
         formLogTravel.setLayoutParams(params);  // Apply the changed layout parameters
         isFormVisible = !isFormVisible;  // Toggle the visibility state
     }
+
+
 
 }
 
