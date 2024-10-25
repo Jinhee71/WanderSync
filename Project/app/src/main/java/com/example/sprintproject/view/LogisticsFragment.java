@@ -4,13 +4,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.sprintproject.R;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 
 import androidx.fragment.app.Fragment;
 
 import com.example.sprintproject.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LogisticsFragment extends Fragment {
+    private PieChart pieChart;
 
     public LogisticsFragment() {
         // Required empty public constructor
@@ -19,16 +36,43 @@ public class LogisticsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_logistics, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_logistics, container, false);
+
+        pieChart = view.findViewById(R.id.pieChart);
+        Button displayDataButton = view.findViewById(R.id.displayDataButton);
+
+        displayDataButton.setOnClickListener(this::onDisplayDataClick);
+
+        return view;    }
 
     public void onDisplayDataClick(View v) {
-        // TODO: visualize the allotted vs planned trip days
-        // in some way (perhaps a pie chart showing how many allotted days are being used as a
-        // percentage).
 
-        // YASHA
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false); // Removes default description
+        pieChart.setDrawHoleEnabled(false); // Disable the hole in the middle
+
+        int allottedDays = 10;  // Example data, should be fetched dynamically
+        int plannedDays = 7;    // Example data, should be fetched dynamically
+
+        int remainingDays = allottedDays - plannedDays;
+        if (remainingDays < 0) {
+            remainingDays = 0;
+        }
+
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(plannedDays, "Planned Days"));
+        entries.add(new PieEntry(remainingDays, "Remaining Days"));
+
+        PieDataSet dataSet = new PieDataSet(entries, "Trip Days");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+        pieChart.invalidate(); // Refreshes the chart
+
+        Toast.makeText(getContext(), "Visualizing allotted vs planned trip days", Toast.LENGTH_SHORT).show();
     }
+
 
     public void onAddNoteButtonClick(View v) {
         // Add functionality for adding a note
