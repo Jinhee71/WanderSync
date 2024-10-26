@@ -104,9 +104,13 @@ public class DestinationFragment extends Fragment {
                 // Toggle visibility of the popup layout
                 if (popupLayout.getVisibility() == View.GONE) {
                     popupLayout.setVisibility(View.VISIBLE);
+                    Log.d("Visibility", "Popup Layout set to VISIBLE");
                 } else {
                     popupLayout.setVisibility(View.GONE);
+                    Log.d("Visibility", "Popup Layout set to GONE");
                 }
+                popupLayout.invalidate();
+                popupLayout.requestLayout();
             }
         });
 
