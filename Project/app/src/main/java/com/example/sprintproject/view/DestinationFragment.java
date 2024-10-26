@@ -42,6 +42,7 @@ public class DestinationFragment extends Fragment {
 
     private boolean isFormVisible = false;  // Tracks whether the Travel Log Form is visible
     private LinearLayout formLogTravel;     // Variable to store the Travel Log Form layout
+    private LinearLayout popupLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +66,8 @@ public class DestinationFragment extends Fragment {
         LinearLayout calculateAndListLayout = rootView.findViewById(R.id.calculateButton_and_list_layout);
         recyclerView = rootView.findViewById(R.id.rv_destinations);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        popupLayout = rootView.findViewById(R.id.popup_layout);
+
 
         // Observe the data from ViewModel
         //seems this is the problem
@@ -95,6 +98,17 @@ public class DestinationFragment extends Fragment {
             }
         });
 
+        calculateVacationTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toggle visibility of the popup layout
+                if (popupLayout.getVisibility() == View.GONE) {
+                    popupLayout.setVisibility(View.VISIBLE);
+                } else {
+                    popupLayout.setVisibility(View.GONE);
+                }
+            }
+        });
 
 
         // Submit button click listener
@@ -149,8 +163,6 @@ public class DestinationFragment extends Fragment {
         formLogTravel.setLayoutParams(params);  // Apply the changed layout parameters
         isFormVisible = !isFormVisible;  // Toggle the visibility state
     }
-
-
 
 }
 
