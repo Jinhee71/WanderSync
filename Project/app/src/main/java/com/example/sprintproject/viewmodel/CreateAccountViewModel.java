@@ -45,7 +45,7 @@ public class CreateAccountViewModel extends ViewModel {
 
     private void createTripAndAddUser(FirebaseUser firebaseUser) {
         Map<String, Object> tripData = new HashMap<>();
-        tripData.put("duration", 10);
+        tripData.put("duration", 365); //Defaults time to 365 (for now)
         ArrayList<String> arrList = new ArrayList<String>();
         arrList.add(firebaseUser.getUid());
         tripData.put("User IDs", arrList);
@@ -66,7 +66,10 @@ public class CreateAccountViewModel extends ViewModel {
         userData.put("authUID", firebaseUser.getUid());
         userData.put("email", firebaseUser.getEmail());
         userData.put("activeTrip", tripId);
-        userData.put("allocatedDays", 5); // default to 5
+        userData.put("allocatedDays", 365); // default to 356
+
+        ArrayList<String> arrList = new ArrayList<String>();
+        userData.put("notes", arrList);
 
         db.collection("User").document(firebaseUser.getUid())
                 .set(userData)
