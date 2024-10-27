@@ -67,10 +67,10 @@ public class CreateAccountViewModel extends ViewModel {
         userData.put("activeTrip", tripId);
         userData.put("allocatedDays", 5); // default to 5
 
-        db.collection("User")
-                .add(userData)
+        db.collection("User").document(firebaseUser.getUid())
+                .set(userData)
                 .addOnSuccessListener(userDocumentReference ->
-                        Log.d("Firestore", "User created with ID: " + userDocumentReference.getId())
+                        Log.d("Firestore", "User created with ID: " + firebaseUser.getUid())
                 )
                 .addOnFailureListener(e ->
                         Log.w("Firestore", "Error adding user document", e)
@@ -97,45 +97,6 @@ public class CreateAccountViewModel extends ViewModel {
                         }
                     }
                 });
-//        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-//        ArrayList<String> usersList = new ArrayList<>();
-//
-//        Map<String, Object> tripData = new HashMap<>();
-//        tripData.put("duration", 10);
-//
-//        ArrayList<String> tripID = new ArrayList<>();
-//
-//        db.collection("Trip")
-//                .add(tripData)
-//                .addOnSuccessListener(documentReference -> {
-//                    // Success
-//                    Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    tripID.add(documentReference.getId());
-//                })
-//                .addOnFailureListener(e -> {
-//                    // Failure
-//                    Log.w("Firestore", "Error adding document", e);
-//                });
-//
-//        Map<String, Object> userData = new HashMap<>();
-//        userData.put("authUID", firebaseUser.getUid());
-//        userData.put("email", firebaseUser.getEmail());
-//        userData.put("activeTrip", tripID.get(0));
-//        userData.put("allocatedDays", 5);
-//
-//        db.collection("User")
-//                .add(userData)
-//                .addOnSuccessListener(documentReference -> {
-//                    // Success
-//                    Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId());
-//                })
-//                .addOnFailureListener(e -> {
-//                    // Failure
-//                    Log.w("Firestore", "Error adding document", e);
-//                });
-//
-//        message.setValue("Account successfully created.");
-//    }
     }
 }
 
