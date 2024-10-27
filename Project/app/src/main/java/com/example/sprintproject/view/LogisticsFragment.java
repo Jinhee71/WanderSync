@@ -71,6 +71,7 @@ public class LogisticsFragment extends Fragment {
 
         collaboratorsLayout = view.findViewById(R.id.collaboratorsLayout);
 
+
         renderCollaborators();
 
         return view;
@@ -209,13 +210,9 @@ public class LogisticsFragment extends Fragment {
     }
 
     private ArrayList<String> fetchCollaboratorsFromDB() {
-        return new ArrayList<>();
-    }
+        ArrayList<String> currCollaborators = new ArrayList<>();
 
-    private void addCollaboratorToDB(String email) {
-        ArrayList<String> tripID = new ArrayList<>();
-
-        DocumentReference currUserRef = db.collection("Users").document(mAuth.getCurrentUser().getUid());
+        DocumentReference currUserRef = db.collection("User").document(mAuth.getCurrentUser().getUid());
 
         currUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -224,7 +221,9 @@ public class LogisticsFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
-                        tripID.add(document.getData().get("activeTrip").toString());
+                        Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
+
+                        getTripCollaborators(document.getString("activeTrip"), currCollaborators);
                     } else {
                         Log.d("LogisticsFragment", "No such document");
                     }
@@ -234,9 +233,57 @@ public class LogisticsFragment extends Fragment {
             }
         });
 
-        Log.d("TRIP ID", tripID.get(0));
+        return new ArrayList<>();
+    }
 
-        db.collection("Users")
+    private void getTripCollaborators(String activeTrip, ArrayList<String> out) {
+        DocumentReference currUserRef = db.collection("Trip").document(activeTrip);
+
+        currUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
+                        Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
+                    } else {
+                        Log.d("LogisticsFragment", "No such document");
+                    }
+                } else {
+                    Log.d("LogisticsFragment", "get failed with ", task.getException());
+                }
+            }
+        });
+
+    }
+
+
+    private void addCollaboratorToDB(String email) {
+        DocumentReference currUserRef = db.collection("User").document(mAuth.getCurrentUser().getUid());
+
+        currUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
+                        Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
+
+                        updateCollaborator(email, document.getString("activeTrip"));
+                    } else {
+                        Log.d("LogisticsFragment", "No such document");
+                    }
+                } else {
+                    Log.d("LogisticsFragment", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void updateCollaborator(String email, String activeTripId) {
+        db.collection("User")
                 .whereEqualTo("email", email)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -245,16 +292,23 @@ public class LogisticsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("LogisticsFragment", document.getId() + " => " + document.getData());
-                                document.getReference().update("activeTrip", tripID.get(0));
+                                document.getReference().update("activeTrip", activeTripId)
+                                        .addOnCompleteListener(updateTask -> {
+                                            if (updateTask.isSuccessful()) {
+                                                Log.d("LogisticsFragment", "Successfully updated collaborator's activeTrip");
+                                            } else {
+                                                Log.d("LogisticsFragment", "Error updating activeTrip: ", updateTask.getException());
+                                            }
+                                        });
                             }
                         } else {
                             Log.d("LogisticsFragment", "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-
     }
+
+
 
     private void addNoteToDB(String note) {
 
