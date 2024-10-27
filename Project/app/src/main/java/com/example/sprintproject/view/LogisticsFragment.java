@@ -39,7 +39,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+<<<<<<< HEAD
 import java.lang.reflect.Array;
+=======
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+>>>>>>> e4c076c17b8807357e410182ccb4d0538f8c8e30
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
@@ -47,11 +54,17 @@ import java.util.Objects;
 
 public class LogisticsFragment extends Fragment {
     private PieChart pieChart;
+<<<<<<< HEAD
     private DatabaseReference mDatabase;
     private LinearLayout collaboratorsLayout; // Add this line
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+=======
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+
+>>>>>>> e4c076c17b8807357e410182ccb4d0538f8c8e30
 
     public LogisticsFragment() {
         // Required empty public constructor
@@ -64,6 +77,10 @@ public class LogisticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_logistics, container, false);
 
         pieChart = view.findViewById(R.id.pieChart);
+
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
         Button displayDataButton = view.findViewById(R.id.displayDataButton);
 
         mAuth = FirebaseAuth.getInstance();
@@ -126,6 +143,21 @@ public class LogisticsFragment extends Fragment {
 
         Toast.makeText(getContext(), "Visualizing allotted vs planned trip days", Toast.LENGTH_SHORT).show();
     }
+
+//    private int fetchAllocatedDays(FirebaseAuth user) {
+//        String userId = user.getCurrentUser().getUid();
+//
+//        db.collection("User").document(userId).get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        long allottedDays = documentSnapshot.contains("allocatedDays") ?
+//                                documentSnapshot.getLong("allocatedDays") : 0;
+//                    } else {
+//                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                }
+//    }
 
 
     public void onAddNoteButtonClick(View v) {
