@@ -23,11 +23,18 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sprintproject.R;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class LogisticsFragment extends Fragment {
     private PieChart pieChart;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+
 
     public LogisticsFragment() {
         // Required empty public constructor
@@ -39,6 +46,10 @@ public class LogisticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_logistics, container, false);
 
         pieChart = view.findViewById(R.id.pieChart);
+
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
         Button displayDataButton = view.findViewById(R.id.displayDataButton);
 
         displayDataButton.setOnClickListener(this::onDisplayDataClick);
@@ -72,6 +83,21 @@ public class LogisticsFragment extends Fragment {
 
         Toast.makeText(getContext(), "Visualizing allotted vs planned trip days", Toast.LENGTH_SHORT).show();
     }
+
+//    private int fetchAllocatedDays(FirebaseAuth user) {
+//        String userId = user.getCurrentUser().getUid();
+//
+//        db.collection("User").document(userId).get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        long allottedDays = documentSnapshot.contains("allocatedDays") ?
+//                                documentSnapshot.getLong("allocatedDays") : 0;
+//                    } else {
+//                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                }
+//    }
 
 
     public void onAddNoteButtonClick(View v) {
