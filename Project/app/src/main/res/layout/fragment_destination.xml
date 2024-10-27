@@ -8,6 +8,11 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
 
     <!-- Main Content Layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -283,4 +288,6 @@
                 android:scrollbars="vertical" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 </FrameLayout>
