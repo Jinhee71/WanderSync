@@ -36,6 +36,7 @@ public class LoginViewModel extends ViewModel {
 
     // Login method
     public void loginUser(String email, String password) {
+        email += "@gmail.com";
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
