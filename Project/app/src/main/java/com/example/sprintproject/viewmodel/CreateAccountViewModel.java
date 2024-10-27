@@ -1,5 +1,7 @@
 package com.example.sprintproject.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,15 +12,26 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateAccountViewModel extends ViewModel {
     private FirebaseAuth mAuth;
     private MutableLiveData<Boolean> isAccountCreated = new MutableLiveData<>();
     private MutableLiveData<String> message = new MutableLiveData<>();
 
+    private FirebaseFirestore db;
+
     public CreateAccountViewModel() {
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();;
+
     }
 
     public LiveData<Boolean> isAccountCreated() {
@@ -41,6 +54,43 @@ public class CreateAccountViewModel extends ViewModel {
                         if (task.isSuccessful()) {
                             isAccountCreated.setValue(true);
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+                            ArrayList<String> usersList = new ArrayList<>();
+
+                            Map<String, Object> tripData = new HashMap<>();
+                            tripData.put("duration", 10);
+
+                            ArrayList<String> tripID = new ArrayList<>();
+
+                            db.collection("Trip")
+                                    .add(tripData)
+                                    .addOnSuccessListener(documentReference -> {
+                                        // Success
+                                        Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        tripID.add(documentReference.getId());
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Failure
+                                        Log.w("Firestore", "Error adding document", e);
+                                    });
+
+                            Map<String, Object> userData = new HashMap<>();
+                            userData.put("authUID", firebaseUser.getUid());
+                            userData.put("email", firebaseUser.getEmail());
+                            userData.put("activeTrip", tripID.get(0));
+                            userData.put("allocatedDays", 5);
+
+                            db.collection("User")
+                                    .add(userData)
+                                    .addOnSuccessListener(documentReference -> {
+                                        // Success
+                                        Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Failure
+                                        Log.w("Firestore", "Error adding document", e);
+                                    });
+
                             message.setValue("Account successfully created.");
                         } else {
                             isAccountCreated.setValue(false);
