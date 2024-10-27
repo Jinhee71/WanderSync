@@ -14,8 +14,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +46,9 @@ public class CreateAccountViewModel extends ViewModel {
     private void createTripAndAddUser(FirebaseUser firebaseUser) {
         Map<String, Object> tripData = new HashMap<>();
         tripData.put("duration", 10);
+        ArrayList<String> arrList = new ArrayList<String>();
+        arrList.add(firebaseUser.getUid());
+        tripData.put("User IDs", arrList);
 
         db.collection("Trip")
                 .add(tripData)
