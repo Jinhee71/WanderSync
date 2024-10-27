@@ -1,11 +1,7 @@
 package com.example.sprintproject.view;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -38,6 +33,7 @@ public class DestinationFragment extends Fragment {
 
     private DestinationViewModel viewModel;
     private EditText locationInput, startDateInput, endDateInput;
+    private EditText uStartDateInput, uEndDateInput, uDuration;
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private boolean isFormVisible = false;  // Tracks whether the Travel Log Form is visible
@@ -57,10 +53,13 @@ public class DestinationFragment extends Fragment {
         locationInput = rootView.findViewById(R.id.et_location);
         startDateInput = rootView.findViewById(R.id.et_start_date);
         endDateInput = rootView.findViewById(R.id.et_end_date);
+        uStartDateInput = rootView.findViewById(R.id.et_start_date_popup);
+        uEndDateInput = rootView.findViewById(R.id.et_end_date_popup);
+        uDuration = rootView.findViewById(R.id.et_duration_popup);
         Button submitButton = rootView.findViewById(R.id.btn_submit);
         Button cancelButton = rootView.findViewById(R.id.btn_cancel);
         Button calculateVacationTimeButton = rootView.findViewById(R.id.btn_calculate_vacation);
-
+        Button finalCalculate = rootView.findViewById(R.id.btn_calculate);
         //layouts
         formLogTravel = rootView.findViewById(R.id.form_log_travel);
         LinearLayout calculateAndListLayout = rootView.findViewById(R.id.calculateButton_and_list_layout);
@@ -150,9 +149,81 @@ public class DestinationFragment extends Fragment {
             }
         });
 
+        finalCalculate.setOnClickListener(v -> {
+            String startDateText = uStartDateInput.getText().toString();
+            String endDateText = uEndDateInput.getText().toString();
+            String durationText = uDuration.getText().toString();
+            int counter = 0;
+            if(!durationText.isEmpty()) {
+                counter++;
+            }
+            if(!startDateText.isEmpty()) {
+                counter++;
+            }
+            if(!endDateText.isEmpty()) {
+                counter++;
+            }
+            if(counter < 2) {
+                Toast.makeText(getContext(), "Invalid, please input at least 2 of the 3 fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                LocalDate startDate = null;
+                LocalDate endDate = null;
+                long duration =0;
+                if(!startDateText.isEmpty()) {
+                    startDate = LocalDate.parse(startDateText, dateFormatter);
+                }
+                if(!endDateText.isEmpty()) {
+                    endDate = LocalDate.parse(endDateText, dateFormatter);
+                }
+                if(!durationText.isEmpty()) {
+                    duration = Integer.parseInt(durationText);
+                }
+
+                if(counter ==3 && (startDate !=null && endDate != null)) {
+                    if(duration != java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate)){
+                        Toast.makeText(getContext(), "Invalid, please make duration and start/end dates match", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                if(counter == 2) {
+                    if (startDate != null && endDate != null && duration == 0) {
+                        // Calculate duration if start and end dates are available
+                        duration = java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate);
+                    } else if (startDate != null && duration != 0 && endDate == null) {
+                        // Calculate end date if start date and duration are available
+                        endDate = startDate.plusDays(duration);
+                    } else if (endDate != null && duration != 0 && startDate == null) {
+                        // Calculate start date if end date and duration are available
+                        startDate = endDate.minusDays(duration);
+                    }
+                }
+
+                // Perform date validation
+                assert startDate != null;
+                if (startDate.isAfter(endDate)) {
+                    Toast.makeText(getContext(), "Start date cannot be after end date", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+//                boolean addedSuccessfully = viewModel.updateAllocated(duration, startDate, endDate);
+//                if (addedSuccessfully) {
+//                    Toast.makeText(getContext(), "Updated Allocated Vacation Data Successfully", Toast.LENGTH_SHORT).show();
+//
+//                } else {
+//                    Toast.makeText(getContext(), "Error updating allocated vacation data", Toast.LENGTH_SHORT).show();
+//                }
+            } catch (DateTimeParseException e) {
+                Toast.makeText(getContext(), "Invalid format", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         return rootView;
     }
+
+
 
     // Method to toggle the height of the Travel Log Form
     private void toggleFormHeight() {

@@ -72,4 +72,5 @@ public class DestinationViewModel extends ViewModel {
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
     }
 
+
 }

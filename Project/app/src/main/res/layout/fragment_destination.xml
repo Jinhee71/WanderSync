@@ -131,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Cancel"
-                        android:backgroundTint="#BDBDBD"
+                        android:backgroundTint="#671994"
                         android:textColor="#FFFFFF"
                         android:layout_marginEnd="8dp"
                         android:layout_marginTop="24dp"/>
@@ -259,7 +259,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Calculate"
-                android:backgroundTint="#BDBDBD"
+                android:backgroundTint="#671994"
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="24dp" />
         </LinearLayout>
