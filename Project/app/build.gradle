@@ -34,8 +34,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-database:21.0.0'
-    implementation 'com.google.firebase:firebase-auth:23.0.0'
     implementation 'androidx.activity:activity:1.8.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -45,11 +43,22 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.6.1"
     implementation "androidx.lifecycle:lifecycle-livedata:2.6.1"
 
+
     // Data Binding (optional, but recommended for MVVM)
     implementation "androidx.databinding:databinding-runtime:7.3.0"
 
+
+
     //Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //Firebase Firestore
+    implementation platform('com.google.firebase:firebase-bom:32.1.1') // Or the latest version
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-common'
+
 
 }
 
