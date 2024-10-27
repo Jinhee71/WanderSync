@@ -39,14 +39,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-<<<<<<< HEAD
 import java.lang.reflect.Array;
-=======
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
->>>>>>> e4c076c17b8807357e410182ccb4d0538f8c8e30
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
@@ -54,17 +50,11 @@ import java.util.Objects;
 
 public class LogisticsFragment extends Fragment {
     private PieChart pieChart;
-<<<<<<< HEAD
     private DatabaseReference mDatabase;
     private LinearLayout collaboratorsLayout; // Add this line
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-=======
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
-
->>>>>>> e4c076c17b8807357e410182ccb4d0538f8c8e30
 
     public LogisticsFragment() {
         // Required empty public constructor
