@@ -5,11 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.sprintproject.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -22,15 +26,21 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import androidx.fragment.app.Fragment;
 
 import com.example.sprintproject.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LogisticsFragment extends Fragment {
     private PieChart pieChart;
+    private DatabaseReference mDatabase;
+    private ArrayList<String> collaborators;
+    private LinearLayout collaboratorsLayout; // Add this line
 
     public LogisticsFragment() {
         // Required empty public constructor
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -43,7 +53,37 @@ public class LogisticsFragment extends Fragment {
 
         displayDataButton.setOnClickListener(this::onDisplayDataClick);
 
-        return view;    }
+        collaboratorsLayout = view.findViewById(R.id.collaboratorsLayout);
+
+        collaborators = new ArrayList<>();
+
+        collaborators.add("contributor 1");
+        collaborators.add("contributor 2");
+        collaborators.add("contributor 3");
+
+        renderCollaborators();
+
+        return view;
+    }
+
+    private void renderCollaborators() {
+        collaboratorsLayout.removeAllViews(); // Clear previous views if any
+        for (int i = 0; i < collaborators.size(); i++) {
+            String collaborator = collaborators.get(i);
+            Button collaboratorButton = new Button(getContext());
+            collaboratorButton.setText(collaborator);
+            collaboratorButton.setId(View.generateViewId()); // Generate a unique ID
+            collaboratorButton.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+            collaboratorButton.setOnClickListener(v -> {
+                // Handle button click
+                displayCollaboratorNotes(v, collaborator);
+            });
+            collaboratorsLayout.addView(collaboratorButton); // Add Button to LinearLayout
+        }
+    }
 
     public void onDisplayDataClick(View v) {
 
@@ -75,10 +115,87 @@ public class LogisticsFragment extends Fragment {
 
 
     public void onAddNoteButtonClick(View v) {
-        // Add functionality for adding a note
+        // * Add functionality for adding a note
+
+        // Display popup with input for new note
+        // Create an EditText for user input
+        final EditText input = new EditText(getContext());
+        input.setHint("Enter your note");
+
+        // Create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add Note")
+                .setView(input)
+                .setPositiveButton("Add", (dialog, which) -> {
+                    String note = input.getText().toString();
+                    if (!note.isEmpty()) {
+                        // Here you can add the note to the database
+                        // Example: mDatabase.child("notes").push().setValue(note);
+                        Toast.makeText(getContext(), "New note added: " + note, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Note cannot be empty!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .setCancelable(true);
+
+        // Show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Add new note under user in db
+
+        // Toast display new note successfully added
+        Toast.makeText(getContext(), "New note added!", Toast.LENGTH_SHORT).show();
     }
 
     public void addCollaboratorButtonClick(View v) {
-        // Add functionality for adding a collaborator
+        // * Add functionality for adding a collaborator
+
+        // Display popup with input for new collaborator username/email
+        final EditText input = new EditText(getContext());
+        input.setHint("Enter collaborator's email");
+
+        // Create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add Collaborator")
+                .setView(input)
+                .setPositiveButton("Add", (dialog, which) -> {
+                    String collaborator = input.getText().toString();
+                    if (!collaborator.isEmpty()) {
+                        // Here you can add the note to the database
+                        // Example: mDatabase.child("notes").push().setValue(note);
+                        Toast.makeText(getContext(), "New collaborator added: " + collaborator, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Username/email cannot be empty!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .setCancelable(true);
+
+        // Show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Add that collaborator to the current trip in db
+
+        // Toast display new collaborator added
+        Toast.makeText(getContext(), "New collaborator added!", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void displayCollaboratorNotes(View v, String username) {
+        // fetch user's notes for this trip
+        String notes = "Notes for " + username + ": \n- Note 1\n- Note 2\n- Note 3"; // test temp
+
+        // display notes
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Collaborator Notes")
+                .setMessage(notes)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

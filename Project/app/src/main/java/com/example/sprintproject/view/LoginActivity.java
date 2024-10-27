@@ -96,20 +96,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-        String email = usernameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        // ADDED FOR TESTING
+        Intent intent = new Intent(LoginActivity.this, FragmentHandlerActivity.class);
+        startActivity(intent);
 
-        if (TextUtils.isEmpty(email)) {
-            usernameEditText.setError("Email is required.");
-            return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError("Password is required.");
-            return;
-        }
-
-        // Process login through ViewModel
-        loginViewModel.loginUser(email, password);
+        return;
+//        String email = usernameEditText.getText().toString();
+//        String password = passwordEditText.getText().toString();
+//
+//        if (TextUtils.isEmpty(email)) {
+//            usernameEditText.setError("Email is required.");
+//            return;
+//        }
+//
+//        if (TextUtils.isEmpty(password)) {
+//            passwordEditText.setError("Password is required.");
+//            return;
+//        }
+//
+//        // Process login through ViewModel
+//        loginViewModel.loginUser(email, password);
     }
 }
