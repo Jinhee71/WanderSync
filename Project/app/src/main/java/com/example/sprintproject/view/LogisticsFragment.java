@@ -1,6 +1,7 @@
 package com.example.sprintproject.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,16 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import androidx.fragment.app.Fragment;
 
 import com.example.sprintproject.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -38,6 +47,9 @@ public class LogisticsFragment extends Fragment {
     private DatabaseReference mDatabase;
     private ArrayList<String> collaborators;
     private LinearLayout collaboratorsLayout; // Add this line
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     public LogisticsFragment() {
         // Required empty public constructor
@@ -51,6 +63,9 @@ public class LogisticsFragment extends Fragment {
 
         pieChart = view.findViewById(R.id.pieChart);
         Button displayDataButton = view.findViewById(R.id.displayDataButton);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         displayDataButton.setOnClickListener(this::onDisplayDataClick);
 
@@ -198,10 +213,52 @@ public class LogisticsFragment extends Fragment {
     }
 
     private void addCollaboratorToDB(String email) {
+        ArrayList<String> tripID = new ArrayList<>();
+
+        DocumentReference currUserRef = db.collection("Users").document(mAuth.getCurrentUser().getUid());
+
+        currUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
+                        tripID.add(document.getData().get("activeTrip").toString());
+                    } else {
+                        Log.d("LogisticsFragment", "No such document");
+                    }
+                } else {
+                    Log.d("LogisticsFragment", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        Log.d("TRIP ID", tripID.get(0));
+
+        db.collection("Users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("LogisticsFragment", document.getId() + " => " + document.getData());
+                                document.getReference().update("activeTrip", tripID.get(0));
+                            }
+                        } else {
+                            Log.d("LogisticsFragment", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
 
     }
 
     private void addNoteToDB(String note) {
+
+
 
     }
 }
