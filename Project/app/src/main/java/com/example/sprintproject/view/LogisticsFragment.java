@@ -29,6 +29,7 @@ import com.example.sprintproject.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,18 +56,18 @@ public class LogisticsFragment extends Fragment {
 
         collaboratorsLayout = view.findViewById(R.id.collaboratorsLayout);
 
-        collaborators = new ArrayList<>();
-
-        collaborators.add("contributor 1");
-        collaborators.add("contributor 2");
-        collaborators.add("contributor 3");
-
         renderCollaborators();
 
         return view;
     }
 
     private void renderCollaborators() {
+        collaborators = fetchCollaboratorsFromDB();
+
+        collaborators.add("contributor 1");
+        collaborators.add("contributor 2");
+        collaborators.add("contributor 3");
+
         collaboratorsLayout.removeAllViews(); // Clear previous views if any
         for (int i = 0; i < collaborators.size(); i++) {
             String collaborator = collaborators.get(i);
@@ -131,6 +132,7 @@ public class LogisticsFragment extends Fragment {
                     if (!note.isEmpty()) {
                         // Here you can add the note to the database
                         // Example: mDatabase.child("notes").push().setValue(note);
+                        addNoteToDB(note);
                         Toast.makeText(getContext(), "New note added: " + note, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "Note cannot be empty!", Toast.LENGTH_SHORT).show();
@@ -142,11 +144,6 @@ public class LogisticsFragment extends Fragment {
         // Show the dialog
         AlertDialog dialog = builder.create();
         dialog.show();
-
-        // Add new note under user in db
-
-        // Toast display new note successfully added
-        Toast.makeText(getContext(), "New note added!", Toast.LENGTH_SHORT).show();
     }
 
     public void addCollaboratorButtonClick(View v) {
@@ -165,6 +162,7 @@ public class LogisticsFragment extends Fragment {
                     if (!collaborator.isEmpty()) {
                         // Here you can add the note to the database
                         // Example: mDatabase.child("notes").push().setValue(note);
+                        addCollaboratorToDB(collaborator);
                         Toast.makeText(getContext(), "New collaborator added: " + collaborator, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "Username/email cannot be empty!", Toast.LENGTH_SHORT).show();
@@ -177,11 +175,7 @@ public class LogisticsFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        // Add that collaborator to the current trip in db
-
-        // Toast display new collaborator added
-        Toast.makeText(getContext(), "New collaborator added!", Toast.LENGTH_SHORT).show();
-
+        renderCollaborators();
     }
 
     private void displayCollaboratorNotes(View v, String username) {
@@ -197,5 +191,17 @@ public class LogisticsFragment extends Fragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private ArrayList<String> fetchCollaboratorsFromDB() {
+        return new ArrayList<>();
+    }
+
+    private void addCollaboratorToDB(String email) {
+
+    }
+
+    private void addNoteToDB(String note) {
+
     }
 }
