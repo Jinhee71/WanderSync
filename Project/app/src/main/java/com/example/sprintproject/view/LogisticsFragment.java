@@ -37,12 +37,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
@@ -108,17 +113,61 @@ public class LogisticsFragment extends Fragment {
 
     public void onDisplayDataClick(View v) {
 
+        String userId = mAuth.getCurrentUser().getUid();
+        db.collection("User").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        long allottedDays = documentSnapshot.contains("allocatedDays") ?
+                                documentSnapshot.getLong("allocatedDays") : 0;
+
+                        String tripId = documentSnapshot.getString("activeTrip");
+
+                        db.collection("Trip").document(tripId).collection("Destination")
+                                .get()
+                                .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    long plannedDays = 0;
+                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                        LocalDate startDate = LocalDate.parse(document.getString("start date"));
+                                        LocalDate endDate = LocalDate.parse(document.getString("end date"));
+
+                                        plannedDays += ChronoUnit.DAYS.between(startDate, endDate);
+                                        //Toast.makeText(getContext(), "length = " + ChronoUnit.DAYS.between(startDate, endDate), Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    int remainingDays = (int) (allottedDays - plannedDays);
+                                    if (remainingDays < 0) {
+                                        remainingDays = 0;
+                                    }
+
+//                                    Output test
+//                                    Toast.makeText(getContext(), "allocatedDays = " + allottedDays, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "plannedDays = " + plannedDays, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "remainingDays = " + remainingDays, Toast.LENGTH_SHORT).show();
+
+
+                                    setupPieChart((int) plannedDays, remainingDays);
+                                })
+                                .addOnFailureListener(e -> {
+                                    System.out.println("Error retrieving destinations: " + e.getMessage());
+                                    e.printStackTrace();
+                                });
+
+
+                    } else {
+                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                });
+    }
+
+    private void setupPieChart(int plannedDays, int remainingDays) {
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false); // Removes default description
         pieChart.setDrawHoleEnabled(false); // Disable the hole in the middle
-
-        int allottedDays = 10;  // Example data, should be fetched dynamically
-        int plannedDays = 7;    // Example data, should be fetched dynamically
-
-        int remainingDays = allottedDays - plannedDays;
-        if (remainingDays < 0) {
-            remainingDays = 0;
-        }
 
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(plannedDays, "Planned Days"));
@@ -133,21 +182,6 @@ public class LogisticsFragment extends Fragment {
 
         Toast.makeText(getContext(), "Visualizing allotted vs planned trip days", Toast.LENGTH_SHORT).show();
     }
-
-//    private int fetchAllocatedDays(FirebaseAuth user) {
-//        String userId = user.getCurrentUser().getUid();
-//
-//        db.collection("User").document(userId).get()
-//                .addOnSuccessListener(documentSnapshot -> {
-//                    if (documentSnapshot.exists()) {
-//                        long allottedDays = documentSnapshot.contains("allocatedDays") ?
-//                                documentSnapshot.getLong("allocatedDays") : 0;
-//                    } else {
-//                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                }
-//    }
 
 
     public void onAddNoteButtonClick(View v) {
