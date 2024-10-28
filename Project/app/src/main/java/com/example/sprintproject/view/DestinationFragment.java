@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.viewmodel.DestinationViewModel;
-import com.google.api.Distribution;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,11 +34,17 @@ public class DestinationFragment extends Fragment {
     private DestinationViewModel destinationViewModel; // ViewModel for managing data
     private RecyclerView recyclerView; // RecyclerView to display destinations
     private DestinationAdapter adapter; // Adapter to bind data to RecyclerView
-    private EditText etLocation, etStartDate, etEndDate; // Form fields
+    private EditText etLocation;
+    private EditText etStartDate;
+    private EditText etEndDate; // Form fields
 
     private DestinationViewModel viewModel;
-    private EditText locationInput, startDateInput, endDateInput;
-    private EditText uStartDateInput, uEndDateInput, uDuration;
+    private EditText locationInput;
+    private EditText startDateInput;
+    private EditText endDateInput;
+    private EditText uStartDateInput;
+    private EditText uEndDateInput;
+    private EditText uDuration;
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private boolean isFormVisible = false;  // Tracks whether the Travel Log Form is visible
@@ -53,7 +57,8 @@ public class DestinationFragment extends Fragment {
     private LinearLayout listLayout;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_destination, container, false);
 
@@ -94,12 +99,15 @@ public class DestinationFragment extends Fragment {
                                     int i = 0;
                                     for (DocumentSnapshot document : tripSnapshot.getDocuments()) {
                                         String name = document.getString("destination name");
-                                        LocalDate startDate = LocalDate.parse(document.getString("start date"));
-                                        LocalDate endDate = LocalDate.parse(document.getString("end date"));
+                                        LocalDate startDate =
+                                                LocalDate.parse(document.getString("start date"));
+                                        LocalDate endDate =
+                                                LocalDate.parse(document.getString("end date"));
 
                                         if (name != null && startDate != null && endDate != null) {
                                             destinationNames.add(name);
-                                            int duration = (int) ChronoUnit.DAYS.between(startDate, endDate);
+                                            int duration = (int) ChronoUnit.DAYS.between(startDate,
+                                                    endDate);
                                             destinationDurations.add(duration);
                                         }
                                         i++;
@@ -111,14 +119,17 @@ public class DestinationFragment extends Fragment {
                                     renderCollaborators(destinationNames, destinationDurations);
                                 })
                                 .addOnFailureListener(e -> {
-                                    Log.w("Firestore", "Error retrieving trip document: " + e.getMessage());
+                                    Log.w("Firestore", "Error retrieving trip document: "
+                                            + e.getMessage());
                                 });
                     } else {
-                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "User data not found",
+                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.w("Firestore", "Error retrieving user document: " + e.getMessage());
+                    Log.w("Firestore", "Error retrieving user document: "
+                            + e.getMessage());
                 });
 
 
@@ -178,20 +189,24 @@ public class DestinationFragment extends Fragment {
 
                 // Perform date validation
                 if (startDate.isAfter(endDate)) {
-                    Toast.makeText(getContext(), "Start date cannot be after end date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            "Start date cannot be after end date", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 // Submit the validated destination details
                 boolean addedSuccessfully = viewModel.addDestination(location, startDate, endDate);
                 if (addedSuccessfully) {
-                    Toast.makeText(getContext(), "Destination added successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            "Destination added successfully!", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Toast.makeText(getContext(), "Error adding destination", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            "Error adding destination", Toast.LENGTH_SHORT).show();
                 }
             } catch (DateTimeParseException e) {
-                Toast.makeText(getContext(), "Invalid date format. Use yyyy-MM-dd.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        "Invalid date format. Use yyyy-MM-dd.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -200,41 +215,46 @@ public class DestinationFragment extends Fragment {
             String endDateText = uEndDateInput.getText().toString();
             String durationText = uDuration.getText().toString();
             int counter = 0;
-            if(!durationText.isEmpty()) {
+            if (!durationText.isEmpty()) {
                 counter++;
             }
-            if(!startDateText.isEmpty()) {
+            if (!startDateText.isEmpty()) {
                 counter++;
             }
-            if(!endDateText.isEmpty()) {
+            if (!endDateText.isEmpty()) {
                 counter++;
             }
-            if(counter < 2) {
-                Toast.makeText(getContext(), "Invalid, please input at least 2 of the 3 fields", Toast.LENGTH_SHORT).show();
+            if (counter < 2) {
+                Toast.makeText(getContext(),
+                        "Invalid, please input at least 2 of the 3 fields",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
             try {
                 LocalDate startDate = null;
                 LocalDate endDate = null;
-                long duration =0;
-                if(!startDateText.isEmpty()) {
+                long duration = 0;
+                if (!startDateText.isEmpty()) {
                     startDate = LocalDate.parse(startDateText, dateFormatter);
                 }
-                if(!endDateText.isEmpty()) {
+                if (!endDateText.isEmpty()) {
                     endDate = LocalDate.parse(endDateText, dateFormatter);
                 }
-                if(!durationText.isEmpty()) {
+                if (!durationText.isEmpty()) {
                     duration = Integer.parseInt(durationText);
                 }
 
-                if(counter ==3 && (startDate !=null && endDate != null)) {
-                    if(duration != java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate)){
-                        Toast.makeText(getContext(), "Invalid, please make duration and start/end dates match", Toast.LENGTH_SHORT).show();
+                if (counter == 3 && (startDate != null && endDate != null)) {
+                    if (duration != java.time.temporal.ChronoUnit.DAYS.between(startDate,
+                            endDate)) {
+                        Toast.makeText(getContext(),
+                                "Invalid, please make duration and start/end dates match",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
-                if(counter == 2) {
+                if (counter == 2) {
                     if (startDate != null && endDate != null && duration == 0) {
                         // Calculate duration if start and end dates are available
                         duration = java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate);
@@ -250,15 +270,18 @@ public class DestinationFragment extends Fragment {
                 // Perform date validation
                 assert startDate != null;
                 if (startDate.isAfter(endDate)) {
-                    Toast.makeText(getContext(), "Start date cannot be after end date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Start date cannot be after end date",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
                 boolean addedSuccessfully = viewModel.updateAllocated(duration, startDate, endDate);
                 if (addedSuccessfully) {
-                    Toast.makeText(getContext(), "Updated Allocated Vacation Data Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Updated Allocated Vacation Data Successfully",
+                            Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Toast.makeText(getContext(), "Error updating allocated vacation data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error updating allocated vacation data",
+                            Toast.LENGTH_SHORT).show();
                 }
             } catch (DateTimeParseException e) {
                 Toast.makeText(getContext(), "Invalid format", Toast.LENGTH_SHORT).show();
@@ -289,7 +312,8 @@ public class DestinationFragment extends Fragment {
         isFormVisible = !isFormVisible;  // Toggle the visibility state
     }
 
-    private void renderCollaborators(ArrayList<String> destinationNames, ArrayList<Integer> destinationDurations) {
+    private void renderCollaborators(ArrayList<String> destinationNames,
+                                     ArrayList<Integer> destinationDurations) {
         listLayout.removeAllViews(); // Clear previous views if any
 
         for (int i = 0; i < destinationNames.size(); i++) {

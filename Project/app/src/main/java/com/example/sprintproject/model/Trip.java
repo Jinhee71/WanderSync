@@ -50,7 +50,7 @@ public class Trip {
     public long getTotalTripDuration() {
         long totalDays = 0;
         for (Destination destination : destinationList) {
-            totalDays += destination.durationCalc(); // Assuming Destination has getTripDuration method
+            totalDays += destination.durationCalc();
         }
         return totalDays;
     }

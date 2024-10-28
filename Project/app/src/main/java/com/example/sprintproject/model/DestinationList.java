@@ -12,8 +12,10 @@ public class DestinationList {
     private DestinationList() {
         destinationList = new ArrayList<>();
         // Prepopulate with at least 2 destinations as required
-        destinationList.add(new Destination("Paris", LocalDate.of(2024, 10, 16), LocalDate.of(2024, 10, 22)));
-        destinationList.add(new Destination("Tokyo", LocalDate.of(2025, 5, 1), LocalDate.of(2025, 5, 10)));
+        destinationList.add(new Destination("Paris", LocalDate.of(2024, 10, 16),
+                LocalDate.of(2024, 10, 22)));
+        destinationList.add(new Destination("Tokyo", LocalDate.of(2025, 5, 1),
+                LocalDate.of(2025, 5, 10)));
     }
 
     // Get the single instance of DestinationList

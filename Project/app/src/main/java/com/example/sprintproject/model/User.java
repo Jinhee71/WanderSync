@@ -11,7 +11,8 @@ public class User {
 
 
     //Constructor
-    public User(String username, String password, LocalDate startDate, LocalDate endDate, long duration) {
+    public User(String username, String password, LocalDate startDate,
+                LocalDate endDate, long duration) {
         this.username = username;
         this.password = password;
         this.startDate = startDate;
