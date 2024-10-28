@@ -14,14 +14,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.viewmodel.DestinationViewModel;
+import com.google.api.Distribution;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 
 public class DestinationFragment extends Fragment {
@@ -39,6 +46,11 @@ public class DestinationFragment extends Fragment {
     private boolean isFormVisible = false;  // Tracks whether the Travel Log Form is visible
     private LinearLayout formLogTravel;     // Variable to store the Travel Log Form layout
     private LinearLayout popupLayout;
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+
+    private LinearLayout listLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,19 +74,53 @@ public class DestinationFragment extends Fragment {
         Button finalCalculate = rootView.findViewById(R.id.btn_calculate);
         //layouts
         formLogTravel = rootView.findViewById(R.id.form_log_travel);
-        LinearLayout calculateAndListLayout = rootView.findViewById(R.id.calculateButton_and_list_layout);
-        recyclerView = rootView.findViewById(R.id.rv_destinations);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayout calculateAndListLayout = rootView.findViewById(R.id.list_layout);
+
         popupLayout = rootView.findViewById(R.id.popup_layout);
+        listLayout = rootView.findViewById(R.id.list_layout);
 
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        ArrayList<String> destinationNames = new ArrayList<>();
+        ArrayList<Integer> destinationDurations = new ArrayList<>();
+        String userId = mAuth.getCurrentUser().getUid();
+        // Fetch destination names and durations
+        db.collection("User").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String tripId = documentSnapshot.getString("activeTrip");
+                        db.collection("Trip").document(tripId).collection("Destination").get()
+                                .addOnSuccessListener(tripSnapshot -> {
+                                    int i = 0;
+                                    for (DocumentSnapshot document : tripSnapshot.getDocuments()) {
+                                        String name = document.getString("destination name");
+                                        LocalDate startDate = LocalDate.parse(document.getString("start date"));
+                                        LocalDate endDate = LocalDate.parse(document.getString("end date"));
 
-        // Observe the data from ViewModel
-        //seems this is the problem
-//        destinationViewModel.getDestinations().observe(getViewLifecycleOwner(), destinations -> {
-//            // Initialize and set the adapter
-//            adapter = new DestinationAdapter(destinations);
-//            recyclerView.setAdapter(adapter);
-//        });
+                                        if (name != null && startDate != null && endDate != null) {
+                                            destinationNames.add(name);
+                                            int duration = (int) ChronoUnit.DAYS.between(startDate, endDate);
+                                            destinationDurations.add(duration);
+                                        }
+                                        i++;
+                                        if (i == 5) {
+                                            break;
+                                        }
+                                    }
+
+                                    renderCollaborators(destinationNames, destinationDurations);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error retrieving trip document: " + e.getMessage());
+                                });
+                    } else {
+                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error retrieving user document: " + e.getMessage());
+                });
+
 
         // Set the initial height of the Travel Log Form to 1dp
         //wanted to do 0dp but not worked.
@@ -241,6 +287,28 @@ public class DestinationFragment extends Fragment {
         }
         formLogTravel.setLayoutParams(params);  // Apply the changed layout parameters
         isFormVisible = !isFormVisible;  // Toggle the visibility state
+    }
+
+    private void renderCollaborators(ArrayList<String> destinationNames, ArrayList<Integer> destinationDurations) {
+        listLayout.removeAllViews(); // Clear previous views if any
+
+        for (int i = 0; i < destinationNames.size(); i++) {
+            // Get destination name and duration
+            String destinationName = destinationNames.get(i);
+            int duration = destinationDurations.get(i);
+
+            // Create a new TextView for each destination
+            TextView destinationTextView = new TextView(getContext());
+            destinationTextView.setText(destinationName + " - " + duration + " days");
+            destinationTextView.setTextSize(18);
+            destinationTextView.setPadding(16, 16, 16, 16);
+
+            // Optionally, style the TextView (text color, background, etc.)
+            destinationTextView.setTextColor(getResources().getColor(R.color.black, null));
+
+            // Add the TextView to the LinearLayout (listLayout)
+            listLayout.addView(destinationTextView);
+        }
     }
 
 }

@@ -42,7 +42,6 @@ import java.util.Objects;
 
 public class LogisticsFragment extends Fragment {
     private PieChart pieChart;
-    private DatabaseReference mDatabase;
     private LinearLayout collaboratorsLayout; // Add this line
     private TextView plannedDaysText; // Add TextView for Planned Days
 
@@ -52,7 +51,6 @@ public class LogisticsFragment extends Fragment {
 
     public LogisticsFragment() {
         // Required empty public constructor
-        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override

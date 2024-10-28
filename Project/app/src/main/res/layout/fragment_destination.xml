@@ -266,7 +266,7 @@
 
         <!-- Calculate Button and Recycler View -->
         <LinearLayout
-            android:id="@+id/calculateButton_and_list_layout"
+            android:id="@+id/list_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -280,12 +280,12 @@
 
 
             <!-- Travel Log List -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_destinations"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:scrollbars="vertical" />
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/rv_destinations"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:scrollbars="vertical" />-->
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
