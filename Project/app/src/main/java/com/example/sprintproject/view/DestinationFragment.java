@@ -207,15 +207,19 @@ public class DestinationFragment extends Fragment {
                     Toast.makeText(getContext(), "Start date cannot be after end date", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                boolean addedSuccessfully = viewModel.updateAllocated(duration, startDate, endDate);
-//                if (addedSuccessfully) {
-//                    Toast.makeText(getContext(), "Updated Allocated Vacation Data Successfully", Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//                    Toast.makeText(getContext(), "Error updating allocated vacation data", Toast.LENGTH_SHORT).show();
-//                }
+                boolean addedSuccessfully = viewModel.updateAllocated(duration, startDate, endDate);
+                if (addedSuccessfully) {
+                    Toast.makeText(getContext(), "Updated Allocated Vacation Data Successfully", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(getContext(), "Error updating allocated vacation data", Toast.LENGTH_SHORT).show();
+                }
             } catch (DateTimeParseException e) {
                 Toast.makeText(getContext(), "Invalid format", Toast.LENGTH_SHORT).show();
+                return;
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Invalid format", Toast.LENGTH_SHORT).show();
+                return;
             }
         });
 

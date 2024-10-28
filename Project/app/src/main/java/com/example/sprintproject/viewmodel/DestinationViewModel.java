@@ -72,5 +72,13 @@ public class DestinationViewModel extends ViewModel {
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
     }
 
-
+    public boolean updateAllocated(long duration, LocalDate startDate, LocalDate endDate){
+        String userId = mAuth.getCurrentUser().getUid();
+        db.collection("User").document(userId).update("allocatedDays",duration)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("Firestore", "duration updated with " + duration);
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
+        return true;
+    }
 }
