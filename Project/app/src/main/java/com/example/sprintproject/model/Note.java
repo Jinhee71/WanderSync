@@ -1,7 +1,5 @@
 package com.example.sprintproject.model;
 
-import java.time.LocalDateTime;
-
 public class Note {
     private String noteContent;
     private User author;

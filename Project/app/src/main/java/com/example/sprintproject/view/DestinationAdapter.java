@@ -14,7 +14,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-public class DestinationAdapter extends RecyclerView.Adapter<DestinationAdapter.DestinationViewHolder> {
+public class DestinationAdapter extends
+        RecyclerView.Adapter<DestinationAdapter.DestinationViewHolder> {
 
     private List<Destination> destinationList;
 
@@ -52,14 +53,23 @@ public class DestinationAdapter extends RecyclerView.Adapter<DestinationAdapter.
         return destinationList.size();
     }
 
-    public static class DestinationViewHolder extends RecyclerView.ViewHolder {
-        public TextView destinationLocation;
-        public TextView daysPlanned;
+    public static class DestinationViewHolder
+            extends RecyclerView.ViewHolder {
+        private TextView destinationLocation;
+        private TextView daysPlanned;
 
         public DestinationViewHolder(View itemView) {
             super(itemView);
             destinationLocation = itemView.findViewById(R.id.tv_destination_location);
             daysPlanned = itemView.findViewById(R.id.tv_days_planned);
+        }
+
+        public TextView getDaysPlanned() {
+            return daysPlanned;
+        }
+
+        public TextView getDestinationLocation() {
+            return destinationLocation;
         }
     }
 }
