@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class DestinationViewModel extends ViewModel {
                     if (userDocument.exists() && userDocument.contains("activeTrip")) {
                         String tripId = userDocument.getString("activeTrip");
                         addDestinationToTrip(tripId, location, startDate, endDate); //Add Destination to Trip ID
+                        updateTripDuration(tripId);
                     } else {
                         Log.w("Firestore", "No active trip found for user.");
                     }
@@ -70,6 +72,36 @@ public class DestinationViewModel extends ViewModel {
                     Log.d("Firestore", "Destination added with ID: " + documentReference.getId());
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
+    }
+
+    private void updateTripDuration(String tripId) {
+        db.collection("Trip").document(tripId).collection("Destination")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    long tripDuration = 0;
+                    if (!querySnapshot.isEmpty()) {
+                        LocalDate earliestStartDate = null;
+                        LocalDate latestEndDate = null;
+
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            LocalDate startDate = LocalDate.parse(document.getString("start date"));
+                            LocalDate endDate = LocalDate.parse(document.getString("end date"));
+
+                            tripDuration += ChronoUnit.DAYS.between(startDate, endDate);
+                        }
+
+                        // Update tripDuration in Firestore after calculating
+                        updateTripDurationInFirestore(tripId, tripDuration);
+                    }
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error retrieving destinations for trip duration update", e));
+    }
+
+    private void updateTripDurationInFirestore(String tripId, long tripDuration) {
+        db.collection("Trip").document(tripId)
+                .update("duration", tripDuration)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Trip duration updated to " + tripDuration + " days"))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error updating trip duration", e));
     }
 
     public boolean updateAllocated(long duration, LocalDate startDate, LocalDate endDate){

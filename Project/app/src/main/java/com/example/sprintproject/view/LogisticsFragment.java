@@ -122,47 +122,39 @@ public class LogisticsFragment extends Fragment {
 
                         String tripId = documentSnapshot.getString("activeTrip");
 
-                        db.collection("Trip").document(tripId).collection("Destination")
-                                .get()
-                                .addOnSuccessListener(queryDocumentSnapshots -> {
-                                    long plannedDays = 0;
-                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                        LocalDate startDate = LocalDate.parse(document.getString("start date"));
-                                        LocalDate endDate = LocalDate.parse(document.getString("end date"));
+                        db.collection("Trip").document(tripId).get()
+                                .addOnSuccessListener(tripSnapshot -> {
+                                    if (tripSnapshot.exists()) {
+                                        long plannedDays = tripSnapshot.contains("duration") ?
+                                                tripSnapshot.getLong("duration") : 0;
 
-                                        plannedDays += ChronoUnit.DAYS.between(startDate, endDate);
-                                        //Toast.makeText(getContext(), "length = " + ChronoUnit.DAYS.between(startDate, endDate), Toast.LENGTH_SHORT).show();
-
-                                    }
-
-                                    int remainingDays = (int) (allottedDays - plannedDays);
-                                    if (remainingDays < 0) {
-                                        remainingDays = 0;
-                                    }
-
+                                        int remainingDays = (int) (allottedDays - plannedDays);
+                                        if (remainingDays < 0) {
+                                            remainingDays = 0;
+                                        }
 //                                    Output test
-//                                    Toast.makeText(getContext(), "allocatedDays = " + allottedDays, Toast.LENGTH_SHORT).show();
-//                                    Toast.makeText(getContext(), "plannedDays = " + plannedDays, Toast.LENGTH_SHORT).show();
-//                                    Toast.makeText(getContext(), "remainingDays = " + remainingDays, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "allocatedDays = " + allottedDays, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "plannedDays = " + plannedDays, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "remainingDays = " + remainingDays, Toast.LENGTH_SHORT).show();
 
-
-                                    setupPieChart((int) plannedDays, remainingDays);
+                                        setupPieChart((int) plannedDays, remainingDays);
+                                    } else {
+                                        Log.w("Firestore", "Trip document not found.");
+                                    }
                                 })
                                 .addOnFailureListener(e -> {
-                                    System.out.println("Error retrieving destinations: " + e.getMessage());
-                                    e.printStackTrace();
+                                    Log.w("Firestore", "Error retrieving trip document: " + e.getMessage());
                                 });
-
 
                     } else {
                         Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
+                    Log.w("Firestore", "Error retrieving user document: " + e.getMessage());
                 });
     }
+
 
     private void setupPieChart(int plannedDays, int remainingDays) {
         pieChart.setUsePercentValues(true);
