@@ -1,20 +1,12 @@
 package com.example.sprintproject;
 
-
-
 import static org.junit.Assert.*;
-
-
 
 import com.example.sprintproject.model.Destination;
 
-
-
 import org.junit.Test;
 
-
 import java.time.LocalDate;
-
 
 public class BrianYangUnitTest2 {
 
@@ -49,7 +41,5 @@ public class BrianYangUnitTest2 {
 
         assertTrue("Duration should be negative for invalid date ranges", destination.durationCalc() < 0);
     }
-
-
 
 }
