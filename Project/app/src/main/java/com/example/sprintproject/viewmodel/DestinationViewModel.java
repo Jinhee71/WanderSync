@@ -30,6 +30,7 @@ public class DestinationViewModel extends ViewModel {
 
     }
 
+
     public LiveData<List<Destination>> getDestinations() {
         MutableLiveData<List<Destination>> liveData = new MutableLiveData<>();
         liveData.setValue(destinationList.getDestinations());
@@ -71,6 +72,7 @@ public class DestinationViewModel extends ViewModel {
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
     }
+
 
 
 }
