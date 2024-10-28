@@ -35,27 +35,22 @@
         android:layout_height="300dp"
         android:layout_marginTop="400dp"/>
 
-
     <TextView
-        android:id="@+id/contributorsText"
+        android:id="@+id/collaboratorsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contributors"
+        android:text="Collaborators"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="215dp"
         android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/contributor1"
-        android:layout_width="300dp"
+    <LinearLayout
+        android:id="@+id/collaboratorsLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Username1"
-        android:background="#671994"
-        android:textColor="#FFFFFF"
-        android:clickable="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="270dp"
-        app:layout_constraintTop_toBottomOf="@id/contributorsText" />
+        android:orientation="vertical"
+        android:layout_marginTop="260dp"
+        android:gravity="center_horizontal" />
 
     <ImageButton
         android:id="@+id/addNoteButton"

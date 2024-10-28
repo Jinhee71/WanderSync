@@ -90,14 +90,15 @@ public class CreateAccountViewModel extends ViewModel {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            Log.w("AccountCreation", "Account successfully created");
                             isAccountCreated.setValue(true);
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             createTripAndAddUser(firebaseUser);
                         } else {
-                            isAccountCreated.setValue(false);
+                            Log.e("AccountCreation", task.getException().getMessage());
                             message.setValue("Account already exists: "
                                     + task.getException().getMessage());
-
+                            isAccountCreated.setValue(false);
                         }
                     }
                 });
