@@ -7,6 +7,17 @@
     tools:context=".view.LogisticsFragment">
 
     <TextView
+        android:id="@+id/plannedDaysText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Planned Days: 0"
+        android:textSize="18sp"
+        android:textColor="#000000" />
+
+    <TextView
         android:id="@+id/logisticsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +44,7 @@
         android:id="@+id/pieChart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="400dp"/>
+        android:layout_marginTop="400dp" />
 
     <TextView
         android:id="@+id/collaboratorsText"
@@ -73,7 +84,5 @@
         android:background="@android:color/holo_green_light"
         android:src="@drawable/ic_add_collaborator3"
         android:contentDescription="Add Collaborator" />
-
-
 
 </FrameLayout>
