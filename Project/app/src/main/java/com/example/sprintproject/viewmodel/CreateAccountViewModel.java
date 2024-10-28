@@ -1,14 +1,12 @@
 package com.example.sprintproject.viewmodel;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.User;
-import com.example.sprintproject.view.AccountCreationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.AuthResult;
@@ -91,7 +89,7 @@ public class CreateAccountViewModel extends ViewModel {
                 )
                 .addOnFailureListener(e ->
                         Log.w("Firestore", "Error adding user document", e)
-                );
+        );
     }
 
 

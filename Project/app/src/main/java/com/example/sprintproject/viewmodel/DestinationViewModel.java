@@ -10,7 +10,6 @@ import com.example.sprintproject.model.Destination;
 import com.example.sprintproject.model.DestinationList;
 import com.google.firebase.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -38,7 +37,8 @@ public class DestinationViewModel extends ViewModel {
     }
 
     public boolean addDestination(String location, LocalDate startDate, LocalDate endDate) {
-        if (location == null || location.trim().isEmpty() || startDate == null || endDate == null || startDate.isAfter(endDate)) {
+        if (location == null || location.trim().isEmpty() || startDate == null
+                || endDate == null || startDate.isAfter(endDate)) {
             return false;
         }
         Destination destination = new Destination(location, startDate, endDate);
@@ -49,7 +49,8 @@ public class DestinationViewModel extends ViewModel {
                 .addOnSuccessListener(userDocument -> {
                     if (userDocument.exists() && userDocument.contains("activeTrip")) {
                         String tripId = userDocument.getString("activeTrip");
-                        addDestinationToTrip(tripId, location, startDate, endDate); //Add Destination to Trip ID
+                        addDestinationToTrip(tripId, location,
+                                startDate, endDate); //Add Destination to Trip ID
                         updateTripDuration(tripId);
                     } else {
                         Log.w("Firestore", "No active trip found for user.");
@@ -60,7 +61,8 @@ public class DestinationViewModel extends ViewModel {
         return true;
     }
 
-    private void addDestinationToTrip(String tripId, String location, LocalDate startDate, LocalDate endDate) {
+    private void addDestinationToTrip(String tripId, String location,
+                                      LocalDate startDate, LocalDate endDate) {
         Map<String, Object> destinationData = new HashMap<>();
         destinationData.put("destination name", location);
         destinationData.put("start date", startDate.toString());
@@ -71,7 +73,8 @@ public class DestinationViewModel extends ViewModel {
                 .addOnSuccessListener(documentReference -> {
                     Log.d("Firestore", "Destination added with ID: " + documentReference.getId());
                 })
-                .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
+                .addOnFailureListener(e -> Log.w("Firestore",
+                        "Error adding destination to trip", e));
     }
 
     private void updateTripDuration(String tripId) {
@@ -94,23 +97,26 @@ public class DestinationViewModel extends ViewModel {
                         updateTripDurationInFirestore(tripId, tripDuration);
                     }
                 })
-                .addOnFailureListener(e -> Log.w("Firestore", "Error retrieving destinations for trip duration update", e));
+                .addOnFailureListener(e -> Log.w("Firestore",
+                        "Error retrieving destinations for trip duration update", e));
     }
 
     private void updateTripDurationInFirestore(String tripId, long tripDuration) {
         db.collection("Trip").document(tripId)
                 .update("duration", tripDuration)
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Trip duration updated to " + tripDuration + " days"))
+                .addOnSuccessListener(aVoid -> Log.d("Firestore",
+                        "Trip duration updated to " + tripDuration + " days"))
                 .addOnFailureListener(e -> Log.w("Firestore", "Error updating trip duration", e));
     }
 
-    public boolean updateAllocated(long duration, LocalDate startDate, LocalDate endDate){
+    public boolean updateAllocated(long duration, LocalDate startDate, LocalDate endDate) {
         String userId = mAuth.getCurrentUser().getUid();
-        db.collection("User").document(userId).update("allocatedDays",duration)
+        db.collection("User").document(userId).update("allocatedDays", duration)
                 .addOnSuccessListener(documentReference -> {
                     Log.d("Firestore", "duration updated with " + duration);
                 })
-                .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
+                .addOnFailureListener(e -> Log.w("Firestore",
+                        "Error adding destination to trip", e));
         return true;
     }
 }
