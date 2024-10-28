@@ -24,6 +24,12 @@ public class LoginViewModel extends ViewModel {
         errorMessage = new MutableLiveData<>();
     }
 
+    public LoginViewModel(FirebaseAuth auth) {
+        this.mAuth = auth;
+        userLiveData = new MutableLiveData<>();
+        errorMessage = new MutableLiveData<>();
+    }
+
     // Returns FirebaseUser LiveData
     public LiveData<FirebaseUser> getUserLiveData() {
         return userLiveData;
@@ -52,4 +58,11 @@ public class LoginViewModel extends ViewModel {
                     }
                 });
     }
+
+    // Method to validate email format
+    public boolean isEmailValid(String email) {
+        // Use a stricter regex to check for a valid email format
+        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+
 }
