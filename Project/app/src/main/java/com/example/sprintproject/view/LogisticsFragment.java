@@ -26,8 +26,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -85,8 +83,8 @@ public class LogisticsFragment extends Fragment {
                         db.collection("Trip").document(tripId).get()
                                 .addOnSuccessListener(tripSnapshot -> {
                                     if (tripSnapshot.exists()) {
-                                        long plannedDays = tripSnapshot.contains("duration") ?
-                                                tripSnapshot.getLong("duration") : 0;
+                                        long plannedDays = tripSnapshot.contains("duration")
+                                                ? tripSnapshot.getLong("duration") : 0;
 
 
                                         plannedDaysText.setText("Planned Days: " + plannedDays);
@@ -95,11 +93,14 @@ public class LogisticsFragment extends Fragment {
                                     }
                                 })
                                 .addOnFailureListener(e -> {
-                                    Log.w("Firestore", "Error retrieving trip document: " + e.getMessage());
+                                    Log.w("Firestore",
+                                            "Error retrieving trip document: " + e.getMessage());
                                 });
 
                     } else {
-                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                "User data not found",
+                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -109,7 +110,8 @@ public class LogisticsFragment extends Fragment {
         return view;
     }
 
-    private void renderCollaborators(ArrayList<String> collaboratorUIDs, ArrayList<String> collaboratorEmails) {
+    private void renderCollaborators(ArrayList<String> collaboratorUIDs,
+                                     ArrayList<String> collaboratorEmails) {
         collaboratorsLayout.removeAllViews(); // Clear previous views if any
         for (int i = 0; i < collaboratorEmails.size(); i++) {
             String collaborator = collaboratorEmails.get(i);
@@ -135,37 +137,35 @@ public class LogisticsFragment extends Fragment {
         db.collection("User").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        long allottedDays = documentSnapshot.contains("allocatedDays") ?
-                                documentSnapshot.getLong("allocatedDays") : 0;
+                        long allottedDays = documentSnapshot.contains("allocatedDays")
+                                ? documentSnapshot.getLong("allocatedDays") : 0;
 
                         String tripId = documentSnapshot.getString("activeTrip");
 
                         db.collection("Trip").document(tripId).get()
                                 .addOnSuccessListener(tripSnapshot -> {
                                     if (tripSnapshot.exists()) {
-                                        long plannedDays = tripSnapshot.contains("duration") ?
-                                                tripSnapshot.getLong("duration") : 0;
+                                        long plannedDays = tripSnapshot.contains("duration")
+                                                ? tripSnapshot.getLong("duration") : 0;
 
                                         int remainingDays = (int) (allottedDays - plannedDays);
                                         if (remainingDays < 0) {
                                             remainingDays = 0;
                                         }
                                         plannedDaysText.setText("Planned Days: " + plannedDays);
-//                                    Output test
-//                                        Toast.makeText(getContext(), "allocatedDays = " + allottedDays, Toast.LENGTH_SHORT).show();
-//                                        Toast.makeText(getContext(), "plannedDays = " + plannedDays, Toast.LENGTH_SHORT).show();
-//                                        Toast.makeText(getContext(), "remainingDays = " + remainingDays, Toast.LENGTH_SHORT).show();
                                         setupPieChart((int) plannedDays, remainingDays);
                                     } else {
                                         Log.w("Firestore", "Trip document not found.");
                                     }
                                 })
                                 .addOnFailureListener(e -> {
-                                    Log.w("Firestore", "Error retrieving trip document: " + e.getMessage());
+                                    Log.w("Firestore",
+                                            "Error retrieving trip document: " + e.getMessage());
                                 });
 
                     } else {
-                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                "User data not found", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -190,7 +190,8 @@ public class LogisticsFragment extends Fragment {
         pieChart.setData(pieData);
         pieChart.invalidate(); // Refreshes the chart
 
-        Toast.makeText(getContext(), "Visualizing allotted vs planned trip days", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),
+                "Visualizing allotted vs planned trip days", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -214,7 +215,8 @@ public class LogisticsFragment extends Fragment {
                         addNoteToDB(note);
 
                     } else {
-                        Toast.makeText(getContext(), "Note cannot be empty!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                "Note cannot be empty!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
@@ -239,12 +241,13 @@ public class LogisticsFragment extends Fragment {
                 .setPositiveButton("Add", (dialog, which) -> {
                     String collaborator = input.getText().toString();
                     if (!collaborator.isEmpty()) {
-                        // Here you can add the note to the database
-                        // Example: mDatabase.child("notes").push().setValue(note);
                         addCollaboratorToDB(collaborator);
-                        Toast.makeText(getContext(), "New collaborator added: " + collaborator, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                "New collaborator added: " + collaborator,
+                                Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "Username/email cannot be empty!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                "Username/email cannot be empty!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
@@ -267,16 +270,16 @@ public class LogisticsFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
-                        Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
+                        Log.d("LogisticsFragment",
+                                "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
 
                         ArrayList<String> docNotes = (ArrayList<String>) document.get("notes");
 
                         if (docNotes != null) {
                             notesList.addAll(docNotes);
                         }
-
-                        // fetch user's notes for this trip
-                        String notes = "Notes for " + username + ": \n - " + String.join("\n - ", notesList); // test temp
+                        String notes = "Notes for " + username + ": \n - "
+                                + String.join("\n - ", notesList); // test temp
 
                         // display notes
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -300,7 +303,8 @@ public class LogisticsFragment extends Fragment {
     private void fetchAndRenderCollaboratorsFromDB() {
         ArrayList<String> currCollaborators = new ArrayList<>();
 
-        DocumentReference currUserRef = db.collection("User").document(mAuth.getCurrentUser().getUid());
+        DocumentReference currUserRef = db.collection("User")
+                .document(mAuth.getCurrentUser().getUid());
 
         currUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -309,7 +313,8 @@ public class LogisticsFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
-                        Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
+                        Log.d("LogisticsFragment",
+                                "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
 
                         getTripCollaborators(document.getString("activeTrip"), currCollaborators);
                     } else {
@@ -340,7 +345,6 @@ public class LogisticsFragment extends Fragment {
                         Log.d("LogisticsFragment", "DocumentSnapshot data OUT ARRAAY: " + out);
 
                         getEmailsFromUIDs(out);
-//                        renderCollaborators(out);
 
                     } else {
                         Log.d("LogisticsFragment", "No such document");
@@ -370,8 +374,10 @@ public class LogisticsFragment extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
-                            Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
+                            Log.d("LogisticsFragment", "DocumentSnapshot data: "
+                                    + document.getData());
+                            Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: "
+                                    + document.getString("activeTrip"));
 
                             userEmails.add(document.getString("email"));
 
@@ -392,7 +398,8 @@ public class LogisticsFragment extends Fragment {
 
 
     private void addCollaboratorToDB(String email) {
-        DocumentReference currUserRef = db.collection("User").document(mAuth.getCurrentUser().getUid());
+        DocumentReference currUserRef = db.collection("User")
+                .document(mAuth.getCurrentUser().getUid());
 
         currUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -401,7 +408,8 @@ public class LogisticsFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("LogisticsFragment", "DocumentSnapshot data: " + document.getData());
-                        Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: " + document.getString("activeTrip"));
+                        Log.d("LogisticsFragment", "DocumentSnapshot activeTrip: "
+                                + document.getString("activeTrip"));
 
                         updateCollaborator(email, document.getString("activeTrip"));
                     } else {
@@ -423,18 +431,25 @@ public class LogisticsFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        ArrayList<String> userIDs = (document.get("User IDs") == null) ? (new ArrayList<>()) : (ArrayList<String>) document.get("User IDs");
+                        ArrayList<String> userIDs = (document
+                                .get("User IDs") == null)
+                                ? (new ArrayList<>()) : (ArrayList<String>) document
+                                .get("User IDs");
                         userIDs.add(uid);
-                        Log.d("Add Trip Collaborators", "Successfully added collaborator's user id" + uid);
+                        Log.d("Add Trip Collaborators",
+                                "Successfully added collaborator's user id" + uid);
 
 
                         document.getReference().update("User IDs", userIDs)
                                 .addOnCompleteListener(updateTask -> {
                                     if (updateTask.isSuccessful()) {
-                                        Log.d("LogisticsFragment", "Successfully added collaborator's user id");
+                                        Log.d("LogisticsFragment",
+                                                "Successfully added collaborator's user id");
                                         fetchAndRenderCollaboratorsFromDB();
                                     } else {
-                                        Log.d("LogisticsFragment", "Error updating activeTrip: ", updateTask.getException());
+                                        Log.d("LogisticsFragment",
+                                                "Error updating activeTrip: ",
+                                                updateTask.getException());
                                     }
                                 });
                     } else {
@@ -457,28 +472,39 @@ public class LogisticsFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("LogisticsFragment", document.getId() + " => " + document.getData());
+                                Log.d("LogisticsFragment", document.getId()
+                                        + " => " + document.getData());
                                 addTripCollaborator(document.getString("authUID"), activeTripId);
                                 document.getReference().update("activeTrip", activeTripId)
                                         .addOnCompleteListener(updateTask -> {
                                             if (updateTask.isSuccessful()) {
-                                                Log.d("LogisticsFragment", "Successfully updated collaborator's activeTrip");
+                                                Log.d("LogisticsFragment",
+                                                        "Successfully updated "
+                                                                + "collaborator's activeTrip");
                                             } else {
-                                                Log.d("LogisticsFragment", "Error updating activeTrip: ", updateTask.getException());
+                                                Log.d("LogisticsFragment",
+                                                        "Error updating activeTrip: ",
+                                                        updateTask.getException());
                                             }
                                         });
 
                                 document.getReference().update("notes", new ArrayList<>())
                                         .addOnCompleteListener(updateTask -> {
                                             if (updateTask.isSuccessful()) {
-                                                Log.d("LogisticsFragment", "Successfully updated collaborator's activeTrip");
+                                                Log.d("LogisticsFragment",
+                                                        "Successfully updated "
+                                                                + "collaborator's activeTrip");
                                             } else {
-                                                Log.d("LogisticsFragment", "Error updating activeTrip: ", updateTask.getException());
+                                                Log.d("LogisticsFragment",
+                                                        "Error updating activeTrip: ",
+                                                        updateTask.getException());
                                             }
                                         });
                             }
                         } else {
-                            Log.d("LogisticsFragment", "Error getting documents: ", task.getException());
+                            Log.d("LogisticsFragment",
+                                    "Error getting documents: ",
+                                    task.getException());
                         }
                     }
                 });
@@ -495,17 +521,27 @@ public class LogisticsFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("LogisticsFragment", document.getId() + " => " + document.getData());
-                                ArrayList<String> userNotes = (document.get("notes") == null) ? (new ArrayList<>()) : (ArrayList<String>) document.get("notes");
+                                Log.d("LogisticsFragment",
+                                        document.getId()
+                                                + " => " + document.getData());
+                                ArrayList<String> userNotes =
+                                        (document.get("notes") == null)
+                                                ? (new ArrayList<>())
+                                                : (ArrayList<String>) document.get("notes");
                                 userNotes.add(note);
 
                                 document.getReference().update("notes", userNotes)
                                         .addOnCompleteListener(updateTask -> {
                                             if (updateTask.isSuccessful()) {
-                                                Log.d("LogisticsFragment", "Successfully added user note");
-                                                Toast.makeText(getContext(), "New note added: " + note, Toast.LENGTH_SHORT).show();
+                                                Log.d("LogisticsFragment",
+                                                        "Successfully added user note");
+                                                Toast.makeText(getContext(),
+                                                        "New note added: "
+                                                                + note, Toast.LENGTH_SHORT).show();
                                             } else {
-                                                Log.d("Add Note", "Error updating user note: ", updateTask.getException());
+                                                Log.d("Add Note",
+                                                        "Error updating user note: ",
+                                                        updateTask.getException());
                                             }
                                         });
                             }
