@@ -1,12 +1,14 @@
 package com.example.sprintproject.viewmodel;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.User;
+import com.example.sprintproject.view.AccountCreationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.AuthResult;
@@ -42,6 +44,17 @@ public class CreateAccountViewModel extends ViewModel {
         return message;
     }
 
+    public void setmAuth(FirebaseAuth mAuth) {
+        this.mAuth = mAuth;
+    }
+
+    public void setMessage(MutableLiveData<String> message) {
+        this.message = message;
+    }
+
+    public void setIsAccountCreated(MutableLiveData<Boolean> isAccountCreated) {
+        this.isAccountCreated = isAccountCreated;
+    }
 
     private void createTripAndAddUser(FirebaseUser firebaseUser) {
         Map<String, Object> tripData = new HashMap<>();
