@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 
@@ -24,12 +23,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 
-import androidx.fragment.app.Fragment;
-
-import com.example.sprintproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,16 +35,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
 import java.util.ArrayList;
-import java.util.Currency;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -57,6 +44,8 @@ public class LogisticsFragment extends Fragment {
     private PieChart pieChart;
     private DatabaseReference mDatabase;
     private LinearLayout collaboratorsLayout; // Add this line
+    private TextView plannedDaysText; // Add TextView for Planned Days
+
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -72,6 +61,8 @@ public class LogisticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_logistics, container, false);
 
         pieChart = view.findViewById(R.id.pieChart);
+        plannedDaysText = view.findViewById(R.id.plannedDaysText);
+
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -87,6 +78,35 @@ public class LogisticsFragment extends Fragment {
 
 
         fetchAndRenderCollaboratorsFromDB();
+
+        String userId = mAuth.getCurrentUser().getUid();
+        db.collection("User").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String tripId = documentSnapshot.getString("activeTrip");
+                        db.collection("Trip").document(tripId).get()
+                                .addOnSuccessListener(tripSnapshot -> {
+                                    if (tripSnapshot.exists()) {
+                                        long plannedDays = tripSnapshot.contains("duration") ?
+                                                tripSnapshot.getLong("duration") : 0;
+
+
+                                        plannedDaysText.setText("Planned Days: " + plannedDays);
+                                    } else {
+                                        Log.w("Firestore", "Trip document not found.");
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error retrieving trip document: " + e.getMessage());
+                                });
+
+                    } else {
+                        Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error retrieving user document: " + e.getMessage());
+                });
 
         return view;
     }
@@ -122,47 +142,39 @@ public class LogisticsFragment extends Fragment {
 
                         String tripId = documentSnapshot.getString("activeTrip");
 
-                        db.collection("Trip").document(tripId).collection("Destination")
-                                .get()
-                                .addOnSuccessListener(queryDocumentSnapshots -> {
-                                    long plannedDays = 0;
-                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                        LocalDate startDate = LocalDate.parse(document.getString("start date"));
-                                        LocalDate endDate = LocalDate.parse(document.getString("end date"));
+                        db.collection("Trip").document(tripId).get()
+                                .addOnSuccessListener(tripSnapshot -> {
+                                    if (tripSnapshot.exists()) {
+                                        long plannedDays = tripSnapshot.contains("duration") ?
+                                                tripSnapshot.getLong("duration") : 0;
 
-                                        plannedDays += ChronoUnit.DAYS.between(startDate, endDate);
-                                        //Toast.makeText(getContext(), "length = " + ChronoUnit.DAYS.between(startDate, endDate), Toast.LENGTH_SHORT).show();
-
-                                    }
-
-                                    int remainingDays = (int) (allottedDays - plannedDays);
-                                    if (remainingDays < 0) {
-                                        remainingDays = 0;
-                                    }
-
+                                        int remainingDays = (int) (allottedDays - plannedDays);
+                                        if (remainingDays < 0) {
+                                            remainingDays = 0;
+                                        }
+                                        plannedDaysText.setText("Planned Days: " + plannedDays);
 //                                    Output test
-//                                    Toast.makeText(getContext(), "allocatedDays = " + allottedDays, Toast.LENGTH_SHORT).show();
-//                                    Toast.makeText(getContext(), "plannedDays = " + plannedDays, Toast.LENGTH_SHORT).show();
-//                                    Toast.makeText(getContext(), "remainingDays = " + remainingDays, Toast.LENGTH_SHORT).show();
-
-
-                                    setupPieChart((int) plannedDays, remainingDays);
+//                                        Toast.makeText(getContext(), "allocatedDays = " + allottedDays, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getContext(), "plannedDays = " + plannedDays, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getContext(), "remainingDays = " + remainingDays, Toast.LENGTH_SHORT).show();
+                                        setupPieChart((int) plannedDays, remainingDays);
+                                    } else {
+                                        Log.w("Firestore", "Trip document not found.");
+                                    }
                                 })
                                 .addOnFailureListener(e -> {
-                                    System.out.println("Error retrieving destinations: " + e.getMessage());
-                                    e.printStackTrace();
+                                    Log.w("Firestore", "Error retrieving trip document: " + e.getMessage());
                                 });
-
 
                     } else {
                         Toast.makeText(getContext(), "User data not found", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
+                    Log.w("Firestore", "Error retrieving user document: " + e.getMessage());
                 });
     }
+
 
     private void setupPieChart(int plannedDays, int remainingDays) {
         pieChart.setUsePercentValues(true);
