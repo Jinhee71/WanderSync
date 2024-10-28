@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-
+//unit test 2
 public class HyeonjaeUnitTest2 {
 
     @Test // Test the duration of vacation
