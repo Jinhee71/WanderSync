@@ -31,7 +31,6 @@ public class DestinationViewModel extends ViewModel {
 
     }
 
-
     public LiveData<List<Destination>> getDestinations() {
         MutableLiveData<List<Destination>> liveData = new MutableLiveData<>();
         liveData.setValue(destinationList.getDestinations());
@@ -84,9 +83,6 @@ public class DestinationViewModel extends ViewModel {
                         LocalDate earliestStartDate = null;
                         LocalDate latestEndDate = null;
 
-<<<<<<< HEAD
-
-=======
                         for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                             LocalDate startDate = LocalDate.parse(document.getString("start date"));
                             LocalDate endDate = LocalDate.parse(document.getString("end date"));
@@ -117,5 +113,4 @@ public class DestinationViewModel extends ViewModel {
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding destination to trip", e));
         return true;
     }
->>>>>>> 144c0afc6855f70879cfc09f4a3e6de7320d9f4d
 }
