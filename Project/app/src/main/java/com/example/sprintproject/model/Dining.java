@@ -3,10 +3,12 @@ package com.example.sprintproject.model;
 public class Dining {
     private String location;
     private String website;
-    private String review;
+    private long review;
     private long reservationTime;
 
-    public Dining(String website, String location, long reservationTime, String review) {
+    public Dining(){}
+
+    public Dining(String website, String location, long reservationTime, long review) {
         this.website = website;
         this.location = location;
         this.reservationTime = reservationTime;
@@ -27,10 +29,10 @@ public class Dining {
         this.website = website;
     }
 
-    public String getReview() {
+    public long getReview() {
         return review;
     }
-    public void setReview(String review) {
+    public void setReview(long review) {
         this.review = review;
     }
 

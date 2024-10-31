@@ -6,6 +6,9 @@ public class Accommodation {
     private int numRooms;
     private String roomType;
 
+    public Accommodation() {
+    }
+
     public Accommodation(long checkInTime, long checkOutTime, int numRooms, String roomType) {
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
