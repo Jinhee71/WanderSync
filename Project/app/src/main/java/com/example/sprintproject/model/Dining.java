@@ -1,14 +1,15 @@
 package com.example.sprintproject.model;
+import java.time.LocalDateTime;
 
 public class Dining {
     private String location;
     private String website;
     private long review;
-    private long reservationTime;
+    private LocalDateTime reservationTime;
 
     public Dining(){}
 
-    public Dining(String website, String location, long reservationTime, long review) {
+    public Dining(String website, String location, LocalDateTime reservationTime, long review) {
         this.website = website;
         this.location = location;
         this.reservationTime = reservationTime;
@@ -36,10 +37,10 @@ public class Dining {
         this.review = review;
     }
 
-    public long getReservationTime() {
+    public LocalDateTime getReservationTime() {
         return reservationTime;
     }
-    public void setReservationTime(long reservationTime) {
+    public void setReservationTime(LocalDateTime reservationTime) {
         this.reservationTime = reservationTime;
     }
 }
