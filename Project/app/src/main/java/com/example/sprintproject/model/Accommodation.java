@@ -1,32 +1,35 @@
 package com.example.sprintproject.model;
+import java.time.LocalDateTime;
+
 
 public class Accommodation {
-    private long checkInTime;
-    private long checkOutTime;
+    private LocalDateTime checkInTime;
+    private LocalDateTime checkOutTime;
     private int numRooms;
     private String roomType;
 
     public Accommodation() {
     }
 
-    public Accommodation(long checkInTime, long checkOutTime, int numRooms, String roomType) {
+    public Accommodation(LocalDateTime checkInTime, LocalDateTime checkOutTime, int numRooms, String roomType) {
+
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
         this.numRooms = numRooms;
         this.roomType = roomType;
     }
 
-    public long getCheckInTime() {
+    public LocalDateTime getCheckInTime() {
         return checkInTime;
     }
-    public void setCheckInTime(long checkInTime) {
+    public void setCheckInTime(LocalDateTime checkInTime) {
         this.checkInTime = checkInTime;
     }
 
-    public long getCheckOutTime() {
+    public LocalDateTime getCheckOutTime() {
         return checkOutTime;
     }
-    public void setCheckOutTime(long checkOutTime) {
+    public void setCheckOutTime(LocalDateTime checkOutTime) {
         this.checkOutTime = checkOutTime;
     }
 
