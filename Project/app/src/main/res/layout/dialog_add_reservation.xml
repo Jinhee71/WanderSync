@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Reservation"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:paddingBottom="16dp" />
+
+    <!-- Time Input Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time:"
+        android:paddingTop="8dp"/>
+    <EditText
+        android:id="@+id/edit_time"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter time" />
+
+    <!-- Location Input Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location:"
+        android:paddingTop="8dp"/>
+    <EditText
+        android:id="@+id/edit_location"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter location" />
+
+    <!-- Website Input Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Website:"
+        android:paddingTop="8dp"/>
+    <EditText
+        android:id="@+id/edit_website"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter website" />
+
+    <!-- Add Reservation Button -->
+    <Button
+        android:id="@+id/button_add_reservation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Reservation"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

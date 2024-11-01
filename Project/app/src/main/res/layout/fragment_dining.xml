@@ -6,10 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".view.DiningFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dining"
-        android:layout_gravity="center" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:text="Dining Reservations"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- ListView for reservation list -->
+        <ListView
+            android:id="@+id/reservation_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="16dp" />
+
+        <ImageButton
+            android:id="@+id/addDiningButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/holo_green_light"
+            android:src="@drawable/ic_add_dining_reservation"
+            android:contentDescription="Add Collaborator" />
+
+    </RelativeLayout>
 
 </FrameLayout>
