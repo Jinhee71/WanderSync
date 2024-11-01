@@ -37,7 +37,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:background="@android:color/holo_green_light"
-            android:src="@drawable/ic_add_collaborator3"
+            android:src="@drawable/ic_add_dining_reservation"
             android:contentDescription="Add Collaborator" />
 
     </RelativeLayout>

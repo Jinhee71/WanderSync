@@ -23,6 +23,8 @@ import java.util.List;
 
 public class DiningFragment extends Fragment {
 
+    public DiningFragment() { }
+
     private List<Dining> diningReservations;
     private DiningReservationAdapter adapter;
 
