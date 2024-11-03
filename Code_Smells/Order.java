@@ -1,9 +1,13 @@
 import java.util.List;
+import java.util.logging.Logger;
+
 
 public class Order {
     private List<Item> items;
     private String customerName;
     private String customerEmail;
+    private static final Logger logger = Logger.getLogger(Order.class.getName());
+
 
     public Order(List<Item> items, String customerName, String customerEmail) {
         this.items = items;
@@ -86,18 +90,18 @@ public class Order {
     }
 
     public boolean hasGiftCard() {
-        boolean has_gift_card = false;
+        boolean hasGiftCard = false;
         for (Item item : items) {
             if (item instanceof GiftCardItem) {
-                has_gift_card = true;
+                hasGiftCard = true;
                 break;
             }
         }
-        return has_gift_card;
+        return hasGiftCard;
     }
 
    public void printOrder() {
-        System.out.println("Order Details:");
+        logger.info("Order Details:");
         for (Item item : items) {
             System.out.println(item.getName() + " - " + item.getPrice());
         }
