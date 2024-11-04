@@ -13,4 +13,21 @@
     <string name="quit">Quit</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Options for number of rooms -->
+    <string-array name="number_of_rooms_options">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <!-- Options for room types -->
+    <string-array name="room_type_options">
+        <item>King Suite</item>
+        <item>Two Single Beds</item>
+        <item>One Single Bed</item>
+    </string-array>
 </resources>
