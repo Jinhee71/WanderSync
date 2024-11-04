@@ -1,0 +1,8 @@
+The codebase displays several code smells that impact its readability, maintainability, and overall adherence to Java best practices. First, there is an inconsistency in naming conventions, as the initial codebase uses snake_case for variable and method names in the order class. This contrasts with Java’s preferred camelCase convention.  Another notable issue is the direct usage of System.out.print() for logging for debug and log messages can quickly clutter the console. This was an issue in the emailSender and order classes. Additionally, the EmailSender class lacks a private constructor, which could lead to accidental instantiation of what should ideally be a utility class. Finally, files are located outside named packages, which risks namespace pollution and increases the chance of naming conflicts, particularly in larger projects. Organizing files into well-defined packages based on functionality—such as order, email, and logging—improves modularity, making it easier for team members to navigate the codebase. Structured packaging enhances maintainability and clarity, allowing for scalable project growth without the risk of class conflicts. So, we created a new package called companyutil and added all the files (DiscountType, EmailSender, GiftCardItem, Item, main, order, TaxableItem) into the package.
+
+Brian Yang
+Sebastian Morgenstern 
+Joseph Seo
+Yasha Rachakonda
+Jinhee Lee
+Hyeonjae Kim 
