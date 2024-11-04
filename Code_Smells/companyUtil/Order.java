@@ -1,5 +1,6 @@
-package companyUtil;
+package companyutil;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -104,7 +105,8 @@ public class Order {
    public void printOrder() {
         logger.info("Order Details:");
         for (Item item : items) {
-            System.out.println(item.getName() + " - " + item.getPrice());
+            String itemDetails = item.getName() + " - "+ item.getPrice();
+            logger.log(Level.INFO, itemDetails);
         }
    }
 

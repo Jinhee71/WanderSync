@@ -1,4 +1,4 @@
-package companyUtil;
+package companyutil;
 
 public class GiftCardItem extends Item {
     public GiftCardItem(String name, double price, int quantity, DiscountType discountType, double discountAmount){
