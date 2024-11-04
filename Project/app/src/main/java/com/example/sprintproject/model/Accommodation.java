@@ -1,49 +1,44 @@
 package com.example.sprintproject.model;
+
 import java.time.LocalDateTime;
 
-
 public class Accommodation {
-    private LocalDateTime checkInTime;
-    private LocalDateTime checkOutTime;
-    private int numRooms;
+    private String location;
+    private String hotelName;
+    private LocalDateTime checkIn;
+    private LocalDateTime checkOut;
+    private int numberOfRooms;
     private String roomType;
 
-    public Accommodation() {
+    public Accommodation () {
+
     }
 
-    public Accommodation(LocalDateTime checkInTime, LocalDateTime checkOutTime, int numRooms, String roomType) {
-
-        this.checkInTime = checkInTime;
-        this.checkOutTime = checkOutTime;
-        this.numRooms = numRooms;
+    public Accommodation(String location, String hotelName, LocalDateTime checkIn, LocalDateTime checkOut, int numberOfRooms, String roomType) {
+        this.location = location;
+        this.hotelName = hotelName;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.numberOfRooms = numberOfRooms;
         this.roomType = roomType;
     }
 
-    public LocalDateTime getCheckInTime() {
-        return checkInTime;
-    }
-    public void setCheckInTime(LocalDateTime checkInTime) {
-        this.checkInTime = checkInTime;
-    }
+    //Getters and Setters
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public LocalDateTime getCheckOutTime() {
-        return checkOutTime;
-    }
-    public void setCheckOutTime(LocalDateTime checkOutTime) {
-        this.checkOutTime = checkOutTime;
-    }
+    public String getHotelName() { return hotelName; }
+    public void setHotelName(String hotelName) { this.hotelName = hotelName; }
 
-    public int getNumRooms() {
-        return numRooms;
-    }
-    public void setNumRooms(int numRooms) {
-        this.numRooms = numRooms;
-    }
+    public LocalDateTime getCheckIn() { return checkIn; }
+    public void setCheckIn(LocalDateTime checkIn) { this.checkIn = checkIn; }
 
-    public String getRoomType() {
-        return roomType;
-    }
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
-    }
+    public LocalDateTime getCheckOut() { return checkOut; }
+    public void setCheckOut(LocalDateTime checkOut) { this.checkOut = checkOut; }
+
+    public int getNumberOfRooms() { return numberOfRooms; }
+    public void setNumberOfRooms(int numberOfRooms) { this.numberOfRooms = numberOfRooms; }
+
+    public String getRoomType() { return roomType; }
+    public void setRoomType(String roomType) { this.roomType = roomType; }
 }
