@@ -1,4 +1,4 @@
-package companyUtil;
+package companyutil;
 class Item {
     private String name;
     private double price;

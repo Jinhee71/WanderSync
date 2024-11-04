@@ -1,4 +1,4 @@
-package companyUtil;
+package companyutil;
 
 public class TaxableItem extends Item {
     private double taxRate = 7;
