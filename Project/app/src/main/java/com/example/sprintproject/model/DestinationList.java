@@ -36,7 +36,6 @@ public class DestinationList {
         return destinationList;
     }
 
-    // Optional: Find a destination by name
     public Destination findDestinationByName(String name) {
         for (Destination destination : destinationList) {
             if (destination.getDestinationLocation().equals(name)) {

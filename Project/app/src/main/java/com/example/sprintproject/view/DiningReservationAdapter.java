@@ -60,4 +60,8 @@ public class DiningReservationAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public void updateData(List<Dining> newReservations) {
+        this.reservations = newReservations;
+    }
 }
