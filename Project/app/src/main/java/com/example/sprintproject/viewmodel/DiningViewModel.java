@@ -11,6 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DiningViewModel extends ViewModel {
 
@@ -102,4 +103,51 @@ public class DiningViewModel extends ViewModel {
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding dining reservation", e));
     }
+
+    public void isDuplicateReservation(String location, LocalDateTime reservationTime, Consumer<Boolean> callback) {
+        String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+        if (userId == null) {
+            Log.w("Auth", "User not authenticated.");
+            callback.accept(false);
+            return;
+        }
+
+        db.collection("User").document(userId).get()
+                .addOnSuccessListener(userDocument -> {
+                    if (userDocument.exists() && userDocument.contains("activeTrip")) {
+                        String tripId = userDocument.getString("activeTrip");
+
+                        db.collection("Trip").document(tripId).collection("Dining")
+                                .get()
+                                .addOnSuccessListener(querySnapshot -> {
+                                    for (QueryDocumentSnapshot document : querySnapshot) {
+                                        String existingLocation = document.getString("Location");
+                                        String reservationTimeStr = document.getString("Reservation Time");
+                                        LocalDateTime existingTime = reservationTimeStr != null ?
+                                                LocalDateTime.parse(reservationTimeStr) : LocalDateTime.now();
+
+                                        // Check if both location and reservation time match
+                                        if (existingLocation.equalsIgnoreCase(location) && existingTime.equals(reservationTime)) {
+                                            callback.accept(true); // Duplicate found
+                                            return;
+                                        }
+                                    }
+                                    callback.accept(false); // No duplicate found
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error checking duplicate dining reservations", e);
+                                    callback.accept(false); // Treat failure as no duplicate
+                                });
+                    } else {
+                        Log.w("Firestore", "No active trip found for user.");
+                        callback.accept(false); // No active trip, so no duplicates
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error retrieving user document", e);
+                    callback.accept(false); // Treat failure as no duplicate
+                });
+    }
+
+
 }
