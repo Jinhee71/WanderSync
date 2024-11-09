@@ -12,10 +12,11 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
-
+import com.example.sprintproject.viewmodel.DiningViewModel;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,15 +24,14 @@ import java.util.List;
 
 public class DiningFragment extends Fragment {
 
-    public DiningFragment() { }
-
-    private List<Dining> diningReservations;
+    private DiningViewModel diningViewModel;
     private DiningReservationAdapter adapter;
+
+    public DiningFragment() { }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dining, container, false);
     }
 
@@ -39,48 +39,51 @@ public class DiningFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize the dining reservations list
-        diningReservations = new ArrayList<>();
+        // Initialize ViewModel
+        diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
 
-        // Initialize the adapter with the context and diningReservations list
-        adapter = new DiningReservationAdapter(getContext(), diningReservations);
+        // Set up the adapter with an empty list initially
+        adapter = new DiningReservationAdapter(getContext(), new ArrayList<>());
 
         // Set up the ListView and attach the adapter
         ListView listView = view.findViewById(R.id.reservation_list);
         listView.setAdapter(adapter);
 
-        // Find the ImageButton by its ID and set an OnClickListener
+        // Load dining reservations and update the adapter
+        loadDiningReservations();
+
+        // Find the add button and set its click listener
         ImageButton addDiningButton = view.findViewById(R.id.addDiningButton);
         addDiningButton.setOnClickListener(v -> showAddReservationDialog());
     }
 
-    // Method to show the dialog for adding a new reservation
-    private void showAddReservationDialog() {
-        // Create a new AlertDialog.Builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    private void loadDiningReservations() {
+        diningViewModel.fetchDiningReservations(new DiningViewModel.FetchCallback() {
+            @Override
+            public void onFetchComplete(List<Dining> diningReservations) {
+                // Update adapter with fetched data
+                adapter.updateData(diningReservations);
+            }
+        });
+    }
 
-        // Inflate the custom layout for the dialog
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_add_reservation, null);
+    private void showAddReservationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_reservation, null);
         builder.setView(dialogView);
 
-        // Find the EditText fields and the Add button inside the dialog
         EditText editTime = dialogView.findViewById(R.id.edit_time);
         EditText editLocation = dialogView.findViewById(R.id.edit_location);
         EditText editWebsite = dialogView.findViewById(R.id.edit_website);
         Button addReservationButton = dialogView.findViewById(R.id.button_add_reservation);
 
-        // Create and show the dialog
         AlertDialog dialog = builder.create();
 
-        // Set an OnClickListener on the "Add Reservation" button
         addReservationButton.setOnClickListener(v -> {
-            // Retrieve input data from the EditText fields
             String timeInput = editTime.getText().toString();
             String location = editLocation.getText().toString();
             String website = editWebsite.getText().toString();
 
-            // Parse time input to LocalDateTime (for simplicity, using current time if parsing fails)
             LocalDateTime reservationTime;
             try {
                 reservationTime = LocalDateTime.parse(timeInput);
@@ -88,12 +91,10 @@ public class DiningFragment extends Fragment {
                 reservationTime = LocalDateTime.now();
             }
 
-            // Add new Dining reservation to the list and update the adapter
-            diningReservations.add(new Dining(location, website, reservationTime, 5)); // Assuming 5 as a placeholder for review
-            adapter.notifyDataSetChanged();
+            diningViewModel.addDining(website, location, reservationTime, 5); // Placeholder for review
 
-            // Close the dialog
             dialog.dismiss();
+            loadDiningReservations(); // Reload reservations after adding a new one
         });
 
         dialog.show();
