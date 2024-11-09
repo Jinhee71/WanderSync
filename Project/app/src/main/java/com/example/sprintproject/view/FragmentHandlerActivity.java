@@ -68,7 +68,7 @@ public class FragmentHandlerActivity extends AppCompatActivity {
     }
 
     public void onLogisticsDisplayDataClick(View v) {
-        logisticsFragment.onDisplayDataClick(v);
+        logisticsFragment.onDisplayDataClick();
         Toast.makeText(v.getContext(), "Display Data Button Clicked!",
                 Toast.LENGTH_SHORT).show();
     }
