@@ -130,62 +130,88 @@ public class LogisticsFragment extends Fragment {
     }
 
     private void fetchCollaboratorEmails(List<String> userIds) {
-        List<String> emails = new ArrayList<>();
+        List<Collaborator> collaborators = new ArrayList<>();
+        int[] count = {0};  // Use an array to make it mutable in the async callback
+
         for (String userId : userIds) {
             db.collection("User").document(userId).get().addOnSuccessListener(userDoc -> {
                 String email = userDoc.getString("email");
                 if (email != null) {
-                    emails.add(email);
-                    if (emails.size() == userIds.size()) {
-                        renderCollaborators(userIds, emails);
-                    }
+                    collaborators.add(new Collaborator(email, userId)); // Pair email with UID
+                }
+
+                // Check if we've fetched all emails and UIDs
+                count[0]++;
+                if (count[0] == userIds.size()) {
+                    // Now that all emails and UIDs are fetched, render the collaborators
+                    renderCollaborators(collaborators);
                 }
             }).addOnFailureListener(e -> Log.e("LogisticsFragment", "Error fetching collaborator email", e));
         }
     }
 
-    private void renderCollaborators(List<String> collaboratorUIDs,
-                                     List<String> collaboratorEmails) {
+
+    private void renderCollaborators(List<Collaborator> collaborators) {
         collaboratorsLayout.removeAllViews(); // Clear previous views if any
-        for (int i = 0; i < collaboratorEmails.size(); i++) {
-            String collaborator = collaboratorEmails.get(i);
-            String collaboratorUID = collaboratorUIDs.get(i);
+
+        for (Collaborator collaborator : collaborators) {
+            String collaboratorEmail = collaborator.getEmail();
+            String collaboratorUID = collaborator.getUid();
 
             Button collaboratorButton = new Button(getContext());
-            collaboratorButton.setText(collaborator);
+            collaboratorButton.setText(collaboratorEmail);
             collaboratorButton.setId(View.generateViewId()); // Generate a unique ID
             collaboratorButton.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             ));
 
+            // Log the UID and email pairing for debugging
+            Log.d("LogisticsFragment", "Rendering button for collaborator: " + collaboratorEmail + " with UID: " + collaboratorUID);
+
             // Pass the correct UID to displayCollaboratorNotes
             collaboratorButton.setOnClickListener(v -> {
-                // Handle button click
-                displayCollaboratorNotes(collaborator, collaboratorUID);
+                // Log to confirm the correct UID is passed
+                Log.d("LogisticsFragment", "Displaying notes for collaborator UID: " + collaboratorUID);
+                displayCollaboratorNotes(collaboratorEmail, collaboratorUID);
             });
 
             collaboratorsLayout.addView(collaboratorButton); // Add Button to LinearLayout
         }
     }
 
+    private void displayCollaboratorNotes(String collaboratorEmail, String collaboratorUID) {
+        // Debugging log to confirm the UID of the collaborator whose notes are being retrieved
+        Log.d("LogisticsFragment", "Fetching notes for collaborator: " + collaboratorEmail + " (UID: " + collaboratorUID + ")");
 
-    private void displayCollaboratorNotes(String userId, String email) {
-        db.collection("User").document(userId).get().addOnSuccessListener(userDoc -> {
-            List<String> notes = (List<String>) userDoc.get("notes");
-            StringBuilder notesText = new StringBuilder("Notes for " + email + ":\n");
-            if (notes != null) {
-                for (String note : notes) {
-                    notesText.append(" - ").append(note).append("\n");
+        db.collection("User").document(collaboratorUID).get().addOnSuccessListener(userDoc -> {
+            if (userDoc.exists()) {
+                List<String> notes = (List<String>) userDoc.get("notes");
+                StringBuilder notesText = new StringBuilder("Notes for " + collaboratorEmail + ":\n");
+
+                if (notes != null && !notes.isEmpty()) {
+                    for (String note : notes) {
+                        notesText.append(" - ").append(note).append("\n");
+                    }
+                } else {
+                    notesText.append("No notes available.");
                 }
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Collaborator Notes")
+                        .setMessage(notesText.toString())
+                        .setPositiveButton("OK", null)
+                        .show();
+            } else {
+                Log.e("LogisticsFragment", "Collaborator not found for UID: " + collaboratorUID);
+                showToast("Error: Collaborator not found.");
             }
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Collaborator Notes")
-                    .setMessage(notesText.toString())
-                    .setPositiveButton("OK", null)
-                    .show();
-        }).addOnFailureListener(e -> showToast("Error retrieving collaborator notes"));
+        }).addOnFailureListener(e -> {
+            Log.e("LogisticsFragment", "Error retrieving collaborator's notes", e);
+            showToast("Error retrieving collaborator notes");
+        });
     }
+
 
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
@@ -276,24 +302,63 @@ public class LogisticsFragment extends Fragment {
                 .addOnSuccessListener(querySnapshot -> {
                     for (QueryDocumentSnapshot document : querySnapshot) {
                         String collaboratorId = document.getString("authUID");
-                        String activeTrip = document.getString("activeTrip");
-                        if (collaboratorId != null && activeTrip != null) {
-                            addCollaboratorToTrip(collaboratorId, activeTrip);
+                        if (collaboratorId != null) {
+                            // Now, get the current user's active trip
+                            String currentUserId = mAuth.getCurrentUser().getUid();
+                            db.collection("User").document(currentUserId).get()
+                                    .addOnSuccessListener(userDoc -> {
+                                        if (userDoc.exists()) {
+                                            String activeTrip = userDoc.getString("activeTrip");
+                                            if (activeTrip != null) {
+                                                // Add the collaborator's ID to the current user's trip
+                                                addCollaboratorToTrip(collaboratorId, activeTrip);
+                                            } else {
+                                                showToast("You don't have an active trip.");
+                                            }
+                                        } else {
+                                            showToast("Error: Current user not found.");
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> showToast("Error fetching current user details"));
                         }
                     }
-                }).addOnFailureListener(e -> showToast("Error adding collaborator"));
+                })
+                .addOnFailureListener(e -> showToast("Error fetching collaborator details"));
     }
+
 
     private void addCollaboratorToTrip(String collaboratorId, String activeTripId) {
         db.collection("Trip").document(activeTripId).get().addOnSuccessListener(tripDoc -> {
             if (tripDoc.exists()) {
+                // Get current list of User IDs from the trip document
                 List<String> userIds = (List<String>) tripDoc.get("User IDs");
                 if (userIds == null) userIds = new ArrayList<>();
-                userIds.add(collaboratorId);
-                tripDoc.getReference().update("User IDs", userIds).addOnSuccessListener(aVoid ->
-                                fetchAndRenderCollaboratorsFromDB())
-                        .addOnFailureListener(e -> showToast("Error adding collaborator to trip"));
+
+                // Add the collaborator's ID to the user's trip
+                if (!userIds.contains(collaboratorId)) {
+                    userIds.add(collaboratorId);
+
+                    // Update the User IDs list in the trip document
+                    tripDoc.getReference().update("User IDs", userIds)
+                            .addOnSuccessListener(aVoid -> {
+                                // Update the collaborator's activeTrip field to the new trip
+                                db.collection("User").document(collaboratorId).update("activeTrip", activeTripId)
+                                        .addOnSuccessListener(aVoid1 -> {
+                                            // Fetch and render the updated collaborators
+                                            fetchAndRenderCollaboratorsFromDB();
+                                            showToast("Collaborator added successfully.");
+                                        })
+                                        .addOnFailureListener(e -> showToast("Error updating collaborator's active trip"));
+                            })
+                            .addOnFailureListener(e -> showToast("Error adding collaborator to trip"));
+                } else {
+                    showToast("Collaborator is already part of this trip.");
+                }
+            } else {
+                showToast("Error: Trip not found.");
             }
         }).addOnFailureListener(e -> showToast("Error fetching trip"));
     }
+
+
 }
