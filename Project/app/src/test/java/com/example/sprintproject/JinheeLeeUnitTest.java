@@ -2,12 +2,15 @@ package com.example.sprintproject;
 
 import static org.junit.Assert.*;
 
+import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Destination;
+import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.User;
 
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class JinheeLeeUnitTest {
 
@@ -78,6 +81,23 @@ public class JinheeLeeUnitTest {
         Destination destination = new Destination("Miami", startDate, endDate);
 
         assertTrue("Duration should be negative for invalid date ranges", destination.durationCalc() < 0);
+    }
+
+    @Test // Test setting and getting the review rating
+    public void testDiningSetReview() {
+        Dining dining = new Dining();
+        dining.setReview(4);
+
+        assertEquals(4, dining.getReview());
+    }
+
+    @Test // Test setting and getting the check-out time
+    public void testSetCheckOut() {
+        LocalDateTime checkOut = LocalDateTime.of(2024, 11, 30, 12, 0);
+        Accommodation accommodation = new Accommodation();
+        accommodation.setCheckOut(checkOut);
+
+        assertEquals(checkOut, accommodation.getCheckOut());
     }
 
 }
