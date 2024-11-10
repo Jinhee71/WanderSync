@@ -1,58 +1,44 @@
 package com.example.sprintproject.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Trip {
-    private List<Destination> destinationList; // Multiple destinations in a trip
-    private List<User> invitedUsers; // Users invited to contribute to the trip
-    private List<Note> noteList;
 
-    // Constructor
-    public Trip() {
-        destinationList = new ArrayList<>();
-        invitedUsers = new ArrayList<>();
-        noteList = new ArrayList<>();
+    private String tripName;
+    private String destination;
+    private List<Accommodation> accommodations;  // List of accommodations
+
+    // Default constructor for Firestore
+    public Trip() {}
+
+    public Trip(String tripName, String destination, List<Accommodation> accommodations) {
+        this.tripName = tripName;
+        this.destination = destination;
+        this.accommodations = accommodations;
     }
 
-    // Add a destination to the trip
-    public void addDestination(Destination destination) {
-        destinationList.add(destination);
+    // Getters and setters
+    public String getTripName() {
+        return tripName;
     }
 
-    // Get all destinations in the trip
-    public List<Destination> getDestinations() {
-        return destinationList;
+    public void setTripName(String tripName) {
+        this.tripName = tripName;
     }
 
-    // Add a user to the invited list
-    public void addInvitedUser(User user) {
-        invitedUsers.add(user);
+    public String getDestination() {
+        return destination;
     }
 
-    // Get the list of invited users
-    public List<User> getInvitedUsers() {
-        return invitedUsers;
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
-
-    // Add a destination to the trip
-    public void addNote(Note note) {
-        noteList.add(note);
+    public List<Accommodation> getAccommodations() {
+        return accommodations;
     }
 
-    // Get all destinations in the trip
-    public List<Note> getNotes() {
-        return noteList;
+    public void setAccommodations(List<Accommodation> accommodations) {
+        this.accommodations = accommodations;
     }
-
-    // Optional: Get total trip duration based on all destinations
-    public long getTotalTripDuration() {
-        long totalDays = 0;
-        for (Destination destination : destinationList) {
-            totalDays += destination.durationCalc();
-        }
-        return totalDays;
-    }
-
 }

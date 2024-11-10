@@ -61,6 +61,9 @@ public class CreateAccountViewModel extends ViewModel {
         arrList.add(firebaseUser.getUid());
         tripData.put("User IDs", arrList);
 
+        ArrayList<String> accommodationsList = new ArrayList<>();
+        tripData.put("accommodations", accommodationsList);
+
         db.collection("Trip")
                 .add(tripData)
                 .addOnSuccessListener(tripDocumentReference -> {
