@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,6 +21,7 @@ import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.viewmodel.DiningViewModel;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,16 +88,24 @@ public class DiningFragment extends Fragment {
             String website = editWebsite.getText().toString();
 
             LocalDateTime reservationTime;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             try {
-                reservationTime = LocalDateTime.parse(timeInput);
+                reservationTime = LocalDateTime.parse(timeInput, formatter);
             } catch (Exception e) {
-                reservationTime = LocalDateTime.now();
+                Toast.makeText(getContext(), "Invalid datetime format. Please use yyyy-MM-dd HH:mm.", Toast.LENGTH_SHORT).show();
+                return;
             }
+            LocalDateTime finalReservationTime = reservationTime;
+            diningViewModel.isDuplicateReservation(location, reservationTime, isDuplicate -> {
+                if (isDuplicate) {
+                    Toast.makeText(getContext(), "Duplicate reservation found!", Toast.LENGTH_SHORT).show();
+                } else {Toast.makeText(getContext(), "Reservation added successfully", Toast.LENGTH_SHORT).show();
+                    diningViewModel.addDining(website, location, finalReservationTime, 5);
 
-            diningViewModel.addDining(website, location, reservationTime, 5); // Placeholder for review
-
-            dialog.dismiss();
-            loadDiningReservations(); // Reload reservations after adding a new one
+                    dialog.dismiss();
+                    loadDiningReservations();
+                }
+            });
         });
 
         dialog.show();

@@ -25,7 +25,7 @@
         android:id="@+id/edit_time"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="Enter time" />
+        android:hint="yyyy-MM-dd HH:mm" />
 
     <!-- Location Input Field -->
     <TextView
