@@ -6,15 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.sprintproject.R;
-
 import com.example.sprintproject.model.Dining;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class DiningReservationAdapter extends BaseAdapter {
-    private Context context;
+    private final Context context;
     private List<Dining> reservations;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public DiningReservationAdapter(Context context, List<Dining> reservations) {
         this.context = context;
@@ -23,12 +25,12 @@ public class DiningReservationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return reservations.size();
+        return reservations != null ? reservations.size() : 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return reservations.get(position);
+        return reservations != null ? reservations.get(position) : null;
     }
 
     @Override
@@ -44,24 +46,32 @@ public class DiningReservationAdapter extends BaseAdapter {
 
         Dining reservation = reservations.get(position);
 
-        TextView location = convertView.findViewById(R.id.location);
-        TextView restaurantName = convertView.findViewById(R.id.restaurant_name);
-        TextView time = convertView.findViewById(R.id.time);
-        TextView website = convertView.findViewById(R.id.website);
+        TextView locationTextView = convertView.findViewById(R.id.location);
+        TextView restaurantNameTextView = convertView.findViewById(R.id.restaurant_name);
+        TextView timeTextView = convertView.findViewById(R.id.time);
+        TextView websiteTextView = convertView.findViewById(R.id.website);
 
-        // Setting data in views
-        location.setText(reservation.getLocation());
-        restaurantName.setText(reservation.getWebsite()); // Assuming website is the name of the restaurant in this context
-        website.setText(reservation.getWebsite());
+        String location = reservation.getLocation() != null ? reservation.getLocation() : "Unknown Location";
+        locationTextView.setText(location);
 
-        // Format and set reservation time
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        time.setText(reservation.getReservationTime().format(formatter));
+        String restaurantName = reservation.getWebsite() != null ? reservation.getWebsite() : "No Website Provided";
+        restaurantNameTextView.setText(restaurantName);
+
+        websiteTextView.setText(reservation.getWebsite() != null ? reservation.getWebsite() : "N/A");
+
+        LocalDateTime reservationTime = reservation.getReservationTime();
+        String formattedTime = reservationTime != null ? reservationTime.format(formatter) : "No Time Provided";
+        timeTextView.setText(formattedTime);
 
         return convertView;
     }
 
     public void updateData(List<Dining> newReservations) {
-        this.reservations = newReservations;
+        if (newReservations != null) {
+            this.reservations = newReservations;
+            notifyDataSetChanged();
+        } else {
+            Toast.makeText(context, "Failed to update dining reservations", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -42,20 +42,16 @@ public class DiningFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize ViewModel
         diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
 
-        // Set up the adapter with an empty list initially
         adapter = new DiningReservationAdapter(getContext(), new ArrayList<>());
 
-        // Set up the ListView and attach the adapter
         ListView listView = view.findViewById(R.id.reservation_list);
         listView.setAdapter(adapter);
 
-        // Load dining reservations and update the adapter
+
         loadDiningReservations();
 
-        // Find the add button and set its click listener
         ImageButton addDiningButton = view.findViewById(R.id.addDiningButton);
         addDiningButton.setOnClickListener(v -> showAddReservationDialog());
     }
