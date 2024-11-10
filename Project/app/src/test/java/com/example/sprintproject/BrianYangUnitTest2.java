@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import com.example.sprintproject.model.Destination;
 import com.example.sprintproject.model.Dining;
+import com.example.sprintproject.model.Accommodation;
 
 import org.junit.Test;
 
@@ -98,6 +99,68 @@ public class BrianYangUnitTest2 {
     }
 
 
+    @Test // Test Accommodation object creation with parameters
+    public void testAccommodationObjectCreation() {
+        LocalDateTime checkIn = LocalDateTime.of(2024, 12, 1, 14, 0);
+        LocalDateTime checkOut = LocalDateTime.of(2024, 12, 10, 11, 0);
+        Accommodation accommodation = new Accommodation("Paris", "Hotel Luxe", checkIn, checkOut, 2, "Suite");
 
+        assertEquals("Paris", accommodation.getLocation());
+        assertEquals("Hotel Luxe", accommodation.getHotelName());
+        assertEquals(checkIn, accommodation.getCheckIn());
+        assertEquals(checkOut, accommodation.getCheckOut());
+        assertEquals(2, accommodation.getNumberOfRooms());
+        assertEquals("Suite", accommodation.getRoomType());
+    }
+
+    @Test // Test setting and getting the location
+    public void testSetLocation() {
+        Accommodation accommodation = new Accommodation();
+        accommodation.setLocation("Seoul");
+
+        assertEquals("Seoul", accommodation.getLocation());
+    }
+
+    @Test // Test setting and getting the hotel name
+    public void testSetHotelName() {
+        Accommodation accommodation = new Accommodation();
+        accommodation.setHotelName("Holiday Inn");
+
+        assertEquals("Holiday Inn", accommodation.getHotelName());
+    }
+
+    @Test // Test setting and getting the check-in time
+    public void testSetCheckIn() {
+        LocalDateTime checkIn = LocalDateTime.of(2024, 11, 25, 15, 0);
+        Accommodation accommodation = new Accommodation();
+        accommodation.setCheckIn(checkIn);
+
+        assertEquals(checkIn, accommodation.getCheckIn());
+    }
+
+    @Test // Test setting and getting the check-out time
+    public void testSetCheckOut() {
+        LocalDateTime checkOut = LocalDateTime.of(2024, 11, 30, 12, 0);
+        Accommodation accommodation = new Accommodation();
+        accommodation.setCheckOut(checkOut);
+
+        assertEquals(checkOut, accommodation.getCheckOut());
+    }
+
+    @Test // Test setting and getting the number of rooms
+    public void testSetNumberOfRooms() {
+        Accommodation accommodation = new Accommodation();
+        accommodation.setNumberOfRooms(3);
+
+        assertEquals(3, accommodation.getNumberOfRooms());
+    }
+
+    @Test // Test setting and getting the room type
+    public void testSetRoomType() {
+        Accommodation accommodation = new Accommodation();
+        accommodation.setRoomType("Deluxe");
+
+        assertEquals("Deluxe", accommodation.getRoomType());
+    }
 
 }
