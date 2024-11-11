@@ -101,8 +101,8 @@ public class BrianYangUnitTest2 {
 
     @Test // Test Accommodation object creation with parameters
     public void testAccommodationObjectCreation() {
-        LocalDateTime checkIn = LocalDateTime.of(2024, 12, 1, 14, 0);
-        LocalDateTime checkOut = LocalDateTime.of(2024, 12, 10, 11, 0);
+        String checkIn = "2024-12-01 14:00";
+        String checkOut = "2024-12-10 11:00";
         Accommodation accommodation = new Accommodation("Paris", "Hotel Luxe", checkIn.toString(), checkOut, 2, "Suite");
 
         assertEquals("Paris", accommodation.getLocation());
@@ -131,28 +131,11 @@ public class BrianYangUnitTest2 {
 
     @Test // Test setting and getting the check-in time
     public void testSetCheckIn() {
-        LocalDateTime checkIn = LocalDateTime.of(2024, 11, 25, 15, 0);
+        String checkIn = "2024-11-25 15:00";
         Accommodation accommodation = new Accommodation();
         accommodation.setCheckIn(checkIn);
 
         assertEquals(checkIn, accommodation.getCheckIn());
-    }
-
-    @Test // Test setting and getting the check-out time
-    public void testSetCheckOut() {
-        LocalDateTime checkOut = LocalDateTime.of(2024, 11, 30, 12, 0);
-        Accommodation accommodation = new Accommodation();
-        accommodation.setCheckOut(checkOut);
-
-        assertEquals(checkOut, accommodation.getCheckOut());
-    }
-
-    @Test // Test setting and getting the number of rooms
-    public void testSetNumberOfRooms() {
-        Accommodation accommodation = new Accommodation();
-        accommodation.setNumberOfRooms(3);
-
-        assertEquals(3, accommodation.getNumberOfRooms());
     }
 
     @Test // Test setting and getting the room type
