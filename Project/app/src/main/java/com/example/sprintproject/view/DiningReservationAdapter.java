@@ -19,7 +19,8 @@ import java.util.List;
 public class DiningReservationAdapter extends BaseAdapter {
     private final Context context;
     private List<Dining> reservations;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER
+            = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public DiningReservationAdapter(Context context, List<Dining> reservations) {
         this.context = context;
@@ -44,7 +45,8 @@ public class DiningReservationAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.dining_reservation_item, parent, false);
+            convertView = LayoutInflater.from(context)
+                    .inflate(R.layout.dining_reservation_item, parent, false);
         }
 
         Dining reservation = reservations.get(position);
@@ -54,22 +56,26 @@ public class DiningReservationAdapter extends BaseAdapter {
         TextView timeTextView = convertView.findViewById(R.id.time);
         TextView websiteTextView = convertView.findViewById(R.id.website);
 
-        String location = reservation.getLocation() != null ? reservation.getLocation() : "Unknown Location";
+        String location = reservation.getLocation() != null
+                ? reservation.getLocation() : "Unknown Location";
         locationTextView.setText(location);
 
-        String restaurantName = reservation.getWebsite() != null ? reservation.getWebsite() : "No Website Provided";
+        String restaurantName = reservation.getWebsite() != null
+                ? reservation.getWebsite() : "No Website Provided";
         restaurantNameTextView.setText(restaurantName);
 
-        websiteTextView.setText(reservation.getWebsite() != null ? reservation.getWebsite() : "N/A");
+        websiteTextView.setText(reservation.getWebsite() != null
+                ? reservation.getWebsite() : "N/A");
 
         LocalDateTime reservationTime = reservation.getReservationTime();
-        String formattedTime = reservationTime != null ? reservationTime.format(formatter) : "No Time Provided";
+        String formattedTime = reservationTime != null
+                ? reservationTime.format(FORMATTER) : "No Time Provided";
         timeTextView.setText(formattedTime);
 
         if (reservationTime != null && reservationTime.isBefore(LocalDateTime.now())) {
-            convertView.setBackgroundColor(Color.LTGRAY); // Mark expired as light gray
+            convertView.setBackgroundColor(Color.LTGRAY);
         } else {
-            convertView.setBackgroundColor(Color.WHITE); // Reset color for non-past due reservations
+            convertView.setBackgroundColor(Color.WHITE);
         }
 
 
@@ -81,7 +87,8 @@ public class DiningReservationAdapter extends BaseAdapter {
             this.reservations = newReservations;
             notifyDataSetChanged();
         } else {
-            Toast.makeText(context, "Failed to update dining reservations", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to update dining reservations",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

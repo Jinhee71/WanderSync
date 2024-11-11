@@ -9,7 +9,7 @@ public class Trip {
     private List<Accommodation> accommodations;  // List of accommodations
 
     // Default constructor for Firestore
-    public Trip() {}
+    public Trip() { }
 
     public Trip(String tripName, String destination, List<Accommodation> accommodations) {
         this.tripName = tripName;

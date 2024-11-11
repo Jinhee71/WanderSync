@@ -34,7 +34,8 @@ public class DiningFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dining, container, false);
     }
 
@@ -95,14 +96,22 @@ public class DiningFragment extends Fragment {
             try {
                 reservationTime = LocalDateTime.parse(timeInput, formatter);
             } catch (Exception e) {
-                Toast.makeText(getContext(), "Invalid datetime format. Please use yyyy-MM-dd HH:mm.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        "Invalid datetime format. Please use yyyy-MM-dd HH:mm.",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
             LocalDateTime finalReservationTime = reservationTime;
             diningViewModel.isDuplicateReservation(location, reservationTime, isDuplicate -> {
                 if (isDuplicate) {
-                    Toast.makeText(getContext(), "Duplicate reservation found!", Toast.LENGTH_SHORT).show();
-                } else {Toast.makeText(getContext(), "Reservation added successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            "Duplicate reservation found!",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(getContext(),
+                        "Reservation added successfully",
+                        Toast.LENGTH_SHORT).show();
                     diningViewModel.addDining(website, location, finalReservationTime, 5);
 
                     dialog.dismiss();

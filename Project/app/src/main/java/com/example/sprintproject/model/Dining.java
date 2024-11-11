@@ -7,7 +7,7 @@ public class Dining {
     private long review;
     private LocalDateTime reservationTime;
 
-    public Dining(){}
+    public Dining() { }
 
     public Dining(String website, String location, LocalDateTime reservationTime, long review) {
         this.website = website;

@@ -2,7 +2,6 @@ package com.example.sprintproject.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.Accommodation;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -46,7 +44,8 @@ public class AccommodationAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.accommodation_item, parent, false);
+            convertView = LayoutInflater.from(context)
+                    .inflate(R.layout.accommodation_item, parent, false);
         }
 
         Accommodation accommodation = accommodations.get(position);
@@ -68,15 +67,17 @@ public class AccommodationAdapter extends BaseAdapter {
         roomTypeView.setText("Room Type: " + accommodation.getRoomType());
 
         LocalDateTime checkInTime = accommodation.getCheckinTime();
-        String formattedCheckIn = checkInTime != null ? checkInTime.format(formatter) : "No Time Provided";
+        String formattedCheckIn = checkInTime != null
+                ? checkInTime.format(formatter) : "No Time Provided";
         checkInView.setText("Check-in: " + formattedCheckIn);
 
-        boolean isPastDue = (checkInTime != null && checkInTime.isBefore(LocalDateTime.now())) || isPastDate(accommodation.getCheckOut());
+        boolean isPastDue = (checkInTime != null && checkInTime.isBefore(LocalDateTime.now()))
+                || isPastDate(accommodation.getCheckOut());
 
         if (isPastDue) {
             convertView.setBackgroundColor(Color.LTGRAY); // Mark expired as light gray
         } else {
-            convertView.setBackgroundColor(Color.WHITE); // Reset color for non-past due reservations
+            convertView.setBackgroundColor(Color.WHITE); // Reset color for non-past due reservation
         }
 
         return convertView;
