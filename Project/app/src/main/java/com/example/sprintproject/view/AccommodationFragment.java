@@ -29,8 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,7 +51,7 @@ public class AccommodationFragment extends Fragment {
 
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    public AccommodationFragment() {}
+    public AccommodationFragment() { }
   
     @Nullable
     @Override
@@ -200,28 +199,35 @@ public class AccommodationFragment extends Fragment {
                 LocalDateTime.parse(checkIn, formatter);
                 LocalDateTime.parse(checkOut, formatter);
             } catch (Exception e) {
-                Toast.makeText(getContext(), "Invalid datetime format. Please use yyyy-MM-dd HH:mm.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        "Invalid datetime format. Please use yyyy-MM-dd HH:mm.",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Check for duplicate accommodation
             isDuplicateAccommodation(location, checkIn, checkOut, isDuplicate -> {
                 if (isDuplicate) {
-                    Toast.makeText(getContext(), "Duplicate accommodation found! Not adding.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            "Duplicate accommodation found! Not adding.",
+                            Toast.LENGTH_SHORT).show();
                     return; // Exit if duplicate is found
                 } else {
 
                     // Only proceed to add if no duplicate
-                    Accommodation newAccommodation = new Accommodation(location, "Hotel Name", checkIn, checkOut, numOfRooms, roomType);
+                    Accommodation newAccommodation = new Accommodation(location,
+                            "Hotel Name", checkIn, checkOut, numOfRooms, roomType);
                     db.collection("Trip").document(activeTripId)
                             .update("accommodations", FieldValue.arrayUnion(newAccommodation))
                             .addOnSuccessListener(aVoid -> {
                                 accommodations.add(newAccommodation);
                                 adapter.notifyDataSetChanged();
-                                Toast.makeText(getContext(), "Accommodation added", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),
+                                        "Accommodation added", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             })
-                            .addOnFailureListener(e -> Toast.makeText(getContext(), "Error adding accommodation", Toast.LENGTH_SHORT).show());
+                            .addOnFailureListener(e -> Toast.makeText(getContext(),
+                                    "Error adding accommodation", Toast.LENGTH_SHORT).show());
                 }
             });
 
@@ -230,7 +236,8 @@ public class AccommodationFragment extends Fragment {
         dialog.show();
     }
 
-    public void isDuplicateAccommodation(String location, String checkIn, String checkOut, Consumer<Boolean> callback) {
+    public void isDuplicateAccommodation(String location, String checkIn,
+                                         String checkOut, Consumer<Boolean> callback) {
         String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
         if (userId == null) {
             Log.w("Auth", "User not authenticated.");
@@ -247,31 +254,36 @@ public class AccommodationFragment extends Fragment {
                                 .addOnSuccessListener(tripDocument -> {
                                     if (tripDocument.exists()) {
                                         // Retrieve fields directly from Trip document
-                                        String existingLocation = tripDocument.getString("Location");
+                                        String existingLocation = tripDocument
+                                                .getString("Location");
                                         String existingCheckIn = tripDocument.getString("CheckIn");
-                                        String existingCheckOut = tripDocument.getString("CheckOut");
+                                        String existingCheckOut = tripDocument
+                                                .getString("CheckOut");
 
                                         // Log values for debugging
-                                        Log.d("DuplicateCheck", "Checking Trip: " +
-                                                "Location = " + existingLocation +
-                                                ", CheckIn = " + existingCheckIn +
-                                                ", CheckOut = " + existingCheckOut);
-                                        Log.d("DuplicateCheck", "Against: " +
-                                                "Location = " + location +
-                                                ", CheckIn = " + checkIn +
-                                                ", CheckOut = " + checkOut);
+                                        Log.d("DuplicateCheck", "Checking Trip: "
+                                                + "Location = " + existingLocation
+                                                + ", CheckIn = " + existingCheckIn
+                                                + ", CheckOut = " + existingCheckOut);
+                                        Log.d("DuplicateCheck", "Against: "
+                                                + "Location = " + location
+                                                + ", CheckIn = " + checkIn
+                                                + ", CheckOut = " + checkOut);
 
                                         // Check if location, check-in, and check-out match
-                                        if (existingLocation != null && existingLocation.equalsIgnoreCase(location) &&
-                                                existingCheckIn != null && existingCheckIn.equals(checkIn) &&
-                                                existingCheckOut != null && existingCheckOut.equals(checkOut)) {
+                                        if (existingLocation != null
+                                                && existingLocation.equalsIgnoreCase(location)
+                                                && existingCheckIn != null
+                                                && existingCheckIn.equals(checkIn)
+                                                && existingCheckOut != null
+                                                && existingCheckOut.equals(checkOut)) {
                                             callback.accept(true); // Duplicate found
                                         } else {
                                             callback.accept(false); // No duplicate found
                                         }
                                     } else {
                                         Log.w("Firestore", "Trip document not found.");
-                                        callback.accept(false); // No trip document found, so no duplicates
+                                        callback.accept(false);
                                     }
                                 })
                                 .addOnFailureListener(e -> {
