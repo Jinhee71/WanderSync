@@ -21,6 +21,7 @@ public class AccommodationAdapter extends BaseAdapter {
 
     private Context context;
     private List<Accommodation> accommodations;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public AccommodationAdapter(Context context, List<Accommodation> accommodations) {
         this.context = context;
@@ -66,33 +67,25 @@ public class AccommodationAdapter extends BaseAdapter {
         numOfRoomsView.setText("Number of Rooms: " + accommodation.getNumberOfRooms());
         roomTypeView.setText("Room Type: " + accommodation.getRoomType());
 
-        // Check if the accommodation is expired and mark it red if necessary
-        if (isPastDate(accommodation.getCheckOut())) {
-            // Mark expired reservations with a red background
-            convertView.setBackgroundColor(Color.RED); // Red color for expired accommodations
+        LocalDateTime checkInTime = accommodation.getCheckinTime();
+        String formattedCheckIn = checkInTime != null ? checkInTime.format(formatter) : "No Time Provided";
+        checkInView.setText("Check-in: " + formattedCheckIn);
+
+        boolean isPastDue = (checkInTime != null && checkInTime.isBefore(LocalDateTime.now())) || isPastDate(accommodation.getCheckOut());
+
+        if (isPastDue) {
+            convertView.setBackgroundColor(Color.LTGRAY); // Mark expired as light gray
         } else {
-            // Set a default background color (e.g., white) for non-expired accommodations
-            convertView.setBackgroundColor(Color.WHITE); // Default color for valid reservations
+            convertView.setBackgroundColor(Color.WHITE); // Reset color for non-past due reservations
         }
 
         return convertView;
     }
 
-    // Method to check if an accommodation's checkout date is in the past
-    private boolean isPastDate(String checkOut) {
+    private boolean isPastDate(String dateTimeStr) {
         try {
-            // Ensure the checkOut date is in the correct format ("yyyy-MM-dd HH:mm")
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime checkOutDate = LocalDateTime.parse(checkOut, formatter);
-
-            // Get current time in UTC (to avoid any local time discrepancies)
-            LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-
-            Log.d("AccommodationAdapter", "Check-out: " + checkOutDate + " Now: " + now);
-
-
-            // Compare the checkOut date with the current date and time
-            return checkOutDate.isBefore(now);
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, formatter);
+            return dateTime.isBefore(LocalDateTime.now());
         } catch (Exception e) {
             // Handle potential parsing issues (e.g., incorrect date format)
             return false;

@@ -1,5 +1,9 @@
 package com.example.sprintproject.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class Accommodation {
 
     private String location;
@@ -35,6 +39,18 @@ public class Accommodation {
 
     public String getCheckIn() {
         return checkIn;
+    }
+
+    public LocalDateTime getCheckinTime() {return parseCheckInTime();}
+
+    private LocalDateTime parseCheckInTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        try {
+            return LocalDateTime.parse(checkIn, formatter);
+        } catch (DateTimeParseException e) {
+            System.err.println("Error parsing check-in time: " + e.getMessage());
+            return null;
+        }
     }
 
     public String getCheckOut() {
