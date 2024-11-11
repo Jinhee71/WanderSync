@@ -30,9 +30,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class AccommodationFragment extends Fragment {
 
@@ -45,6 +49,8 @@ public class AccommodationFragment extends Fragment {
     private final SortByCheckInStrategy checkInStrategy = new SortByCheckInStrategy();
     private final SortByCheckOutStrategy checkOutStrategy = new SortByCheckOutStrategy();
     private final SortByLocationStrategy locationStrategy = new SortByLocationStrategy();
+
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public AccommodationFragment() {}
 
@@ -176,32 +182,103 @@ public class AccommodationFragment extends Fragment {
             String location = locationEdit.getText().toString();
             String roomType = roomTypeSpinner.getSelectedItem().toString();
             int numOfRooms = Integer.parseInt(numOfRoomsSpinner.getSelectedItem().toString());
-
-            // Get check-in and check-out dates as strings
             String checkIn = checkInEdit.getText().toString();
             String checkOut = checkOutEdit.getText().toString();
 
-            // Validate that the dates are in correct format (e.g. "yyyy-MM-dd HH:mm")
-            if (checkIn.isEmpty() || checkOut.isEmpty()) {
-                Toast.makeText(getContext(), "Please enter valid check-in and check-out dates", Toast.LENGTH_SHORT).show();
+            // Validate check-in and check-out date formats
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            try {
+                LocalDateTime.parse(checkIn, formatter);
+                LocalDateTime.parse(checkOut, formatter);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Invalid datetime format. Please use yyyy-MM-dd HH:mm.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Create a new accommodation object
-            Accommodation newAccommodation = new Accommodation(location, "Hotel Name", checkIn, checkOut, numOfRooms, roomType);
+            // Check for duplicate accommodation
+            isDuplicateAccommodation(location, checkIn, checkOut, isDuplicate -> {
+                if (isDuplicate) {
+                    Toast.makeText(getContext(), "Duplicate accommodation found! Not adding.", Toast.LENGTH_SHORT).show();
+                    return; // Exit if duplicate is found
+                } else {
 
-            // Add the new accommodation to the trip's accommodations list in Firestore
-            db.collection("Trip").document(activeTripId)
-                    .update("accommodations", FieldValue.arrayUnion(newAccommodation))
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(getContext(), "Accommodation added", Toast.LENGTH_SHORT).show();
-                        accommodations.add(newAccommodation);
-                        adapter.notifyDataSetChanged();
-                        dialog.dismiss();
-                    })
-                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Error adding accommodation", Toast.LENGTH_SHORT).show());
+                    // Only proceed to add if no duplicate
+                    Accommodation newAccommodation = new Accommodation(location, "Hotel Name", checkIn, checkOut, numOfRooms, roomType);
+                    db.collection("Trip").document(activeTripId)
+                            .update("accommodations", FieldValue.arrayUnion(newAccommodation))
+                            .addOnSuccessListener(aVoid -> {
+                                accommodations.add(newAccommodation);
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(getContext(), "Accommodation added", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(getContext(), "Error adding accommodation", Toast.LENGTH_SHORT).show());
+                }
+            });
+
         });
 
         dialog.show();
     }
+
+    public void isDuplicateAccommodation(String location, String checkIn, String checkOut, Consumer<Boolean> callback) {
+        String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+        if (userId == null) {
+            Log.w("Auth", "User not authenticated.");
+            callback.accept(false);
+            return;
+        }
+
+        db.collection("User").document(userId).get()
+                .addOnSuccessListener(userDocument -> {
+                    if (userDocument.exists() && userDocument.contains("activeTrip")) {
+                        String tripId = userDocument.getString("activeTrip");
+
+                        db.collection("Trip").document(tripId).get()
+                                .addOnSuccessListener(tripDocument -> {
+                                    if (tripDocument.exists()) {
+                                        // Retrieve fields directly from Trip document
+                                        String existingLocation = tripDocument.getString("Location");
+                                        String existingCheckIn = tripDocument.getString("CheckIn");
+                                        String existingCheckOut = tripDocument.getString("CheckOut");
+
+                                        // Log values for debugging
+                                        Log.d("DuplicateCheck", "Checking Trip: " +
+                                                "Location = " + existingLocation +
+                                                ", CheckIn = " + existingCheckIn +
+                                                ", CheckOut = " + existingCheckOut);
+                                        Log.d("DuplicateCheck", "Against: " +
+                                                "Location = " + location +
+                                                ", CheckIn = " + checkIn +
+                                                ", CheckOut = " + checkOut);
+
+                                        // Check if location, check-in, and check-out match
+                                        if (existingLocation != null && existingLocation.equalsIgnoreCase(location) &&
+                                                existingCheckIn != null && existingCheckIn.equals(checkIn) &&
+                                                existingCheckOut != null && existingCheckOut.equals(checkOut)) {
+                                            callback.accept(true); // Duplicate found
+                                        } else {
+                                            callback.accept(false); // No duplicate found
+                                        }
+                                    } else {
+                                        Log.w("Firestore", "Trip document not found.");
+                                        callback.accept(false); // No trip document found, so no duplicates
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error retrieving trip document", e);
+                                    callback.accept(false); // Treat failure as no duplicate
+                                });
+                    } else {
+                        Log.w("Firestore", "No active trip found for user.");
+                        callback.accept(false); // No active trip, so no duplicates
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error retrieving user document", e);
+                    callback.accept(false); // Treat failure as no duplicate
+                });
+    }
+
+
 }
