@@ -93,7 +93,7 @@ public class JinheeLeeUnitTest {
 
     @Test // Test setting and getting the check-out time
     public void testSetCheckOut() {
-        LocalDateTime checkOut = LocalDateTime.of(2024, 11, 30, 12, 0);
+        String checkOut = "5:00";
         Accommodation accommodation = new Accommodation();
         accommodation.setCheckOut(checkOut);
 
