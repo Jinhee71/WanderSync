@@ -5,7 +5,7 @@ package com.example.sprintproject;
 import static org.junit.Assert.*;
 
 
-
+import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Destination;
 import com.example.sprintproject.model.Trip;
 import com.example.sprintproject.model.User;
@@ -31,18 +31,20 @@ public class JosephSeoUnitTest {
     }
 
     @Test
-    public void testAddDestination() {
-        trip.addDestination(destination);
+    public void testInvalidDateRange() {
+        LocalDate startDate = LocalDate.of(2024, 12, 10);
+        LocalDate endDate = LocalDate.of(2024, 12, 1);
+        Destination destination = new Destination("Paris", startDate, endDate);
 
-        assertEquals(1, trip.getDestinations().size());
-        assertEquals(destination, trip.getDestinations().get(0));
+
+        assertTrue("Duration should be negative for invalid date ranges", destination.durationCalc() < 0);
     }
 
-    @Test
-    public void testAddInvitedUser() {
-        trip.addInvitedUser(user);
+    @Test // Test setting and getting the room type
+    public void testSetRoomType() {
+        Accommodation accommodation = new Accommodation();
+        accommodation.setRoomType("Deluxe");
 
-        assertEquals(1, trip.getInvitedUsers().size());
-        assertEquals(user, trip.getInvitedUsers().get(0));
+        assertEquals("Deluxe", accommodation.getRoomType());
     }
 }
