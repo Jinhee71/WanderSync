@@ -37,8 +37,7 @@ public class DiningViewModel extends ViewModel {
 
                         db.collection("Trip").document(tripId).collection("Dining")
                                 .get()
-                                .addOnSuccessListener(querySnapshot -> {
-                                    List<Dining> reservations = new ArrayList<>();
+                                .addOnSuccessListener(querySnapshot -> {List<Dining> reservations = new ArrayList<>();
                                     for (QueryDocumentSnapshot document : querySnapshot) {
                                         try {
                                             String location = document.getString("Location");

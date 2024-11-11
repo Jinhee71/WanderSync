@@ -52,6 +52,13 @@ public class DiningFragment extends Fragment {
 
         loadDiningReservations();
 
+        Button sortByDateButton = view.findViewById(R.id.sort_by_date_button);
+        sortByDateButton.setOnClickListener(v -> {
+            adapter.sortReservationsByDate();
+            Toast.makeText(getContext(), "Sorted by Reservation Date", Toast.LENGTH_SHORT).show();
+        });
+
+
         ImageButton addDiningButton = view.findViewById(R.id.addDiningButton);
         addDiningButton.setOnClickListener(v -> showAddReservationDialog());
     }
