@@ -1,6 +1,7 @@
 package com.example.sprintproject.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DiningReservationAdapter extends BaseAdapter {
@@ -63,6 +66,13 @@ public class DiningReservationAdapter extends BaseAdapter {
         String formattedTime = reservationTime != null ? reservationTime.format(formatter) : "No Time Provided";
         timeTextView.setText(formattedTime);
 
+        if (reservationTime != null && reservationTime.isBefore(LocalDateTime.now())) {
+            convertView.setBackgroundColor(Color.LTGRAY); // Mark expired as light gray
+        } else {
+            convertView.setBackgroundColor(Color.WHITE); // Reset color for non-past due reservations
+        }
+
+
         return convertView;
     }
 
@@ -74,4 +84,21 @@ public class DiningReservationAdapter extends BaseAdapter {
             Toast.makeText(context, "Failed to update dining reservations", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void sortReservationsByDate() {
+        if (reservations != null) {
+            Collections.sort(reservations, new Comparator<Dining>() {
+                @Override
+                public int compare(Dining o1, Dining o2) {
+                    return o1.getReservationTime().compareTo(o2.getReservationTime());
+                }
+            });
+            notifyDataSetChanged();
+        }
+    }
+
+
+
+
+
 }
