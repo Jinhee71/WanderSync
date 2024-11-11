@@ -2,6 +2,7 @@ package com.example.sprintproject.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.Accommodation;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -49,6 +51,7 @@ public class AccommodationAdapter extends BaseAdapter {
 
         Accommodation accommodation = accommodations.get(position);
 
+        // Get references to the TextViews
         TextView locationView = convertView.findViewById(R.id.location);
         TextView hotelNameView = convertView.findViewById(R.id.hotel_name);
         TextView checkInView = convertView.findViewById(R.id.check_in);
@@ -56,6 +59,7 @@ public class AccommodationAdapter extends BaseAdapter {
         TextView numOfRoomsView = convertView.findViewById(R.id.num_of_rooms);
         TextView roomTypeView = convertView.findViewById(R.id.room_type);
 
+        // Set the text for the accommodation views
         locationView.setText(accommodation.getLocation());
         hotelNameView.setText(accommodation.getHotelName());
         checkInView.setText("Check-in: " + accommodation.getCheckIn());
@@ -83,6 +87,7 @@ public class AccommodationAdapter extends BaseAdapter {
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, formatter);
             return dateTime.isBefore(LocalDateTime.now());
         } catch (Exception e) {
+            // Handle potential parsing issues (e.g., incorrect date format)
             return false;
         }
     }
