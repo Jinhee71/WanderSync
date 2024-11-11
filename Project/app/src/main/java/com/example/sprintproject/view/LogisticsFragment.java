@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 
@@ -23,21 +22,15 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 
 public class LogisticsFragment extends Fragment {
@@ -52,7 +45,8 @@ public class LogisticsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_logistics, container, false);
 
         pieChart = view.findViewById(R.id.pieChart);
@@ -76,8 +70,10 @@ public class LogisticsFragment extends Fragment {
                 String tripId = userDoc.getString("activeTrip");
                 db.collection("Trip").document(tripId).get().addOnSuccessListener(tripDoc -> {
                     if (tripDoc.exists()) {
-                        long plannedDays = tripDoc.contains("duration") ? tripDoc.getLong("duration") : 0;
-                        long allottedDays = userDoc.contains("allocatedDays") ? userDoc.getLong("allocatedDays") : 0;
+                        long plannedDays = tripDoc.contains("duration")
+                                ? tripDoc.getLong("duration") : 0;
+                        long allottedDays = userDoc.contains("allocatedDays")
+                                ? userDoc.getLong("allocatedDays") : 0;
                         int remainingDays = Math.max(0, (int) (allottedDays - plannedDays));
                         plannedDaysText.setText("Planned Days: " + plannedDays);
                         setupPieChart((int) plannedDays, remainingDays);
@@ -146,7 +142,8 @@ public class LogisticsFragment extends Fragment {
                     // Now that all emails and UIDs are fetched, render the collaborators
                     renderCollaborators(collaborators);
                 }
-            }).addOnFailureListener(e -> Log.e("LogisticsFragment", "Error fetching collaborator email", e));
+            }).addOnFailureListener(e ->
+                    Log.e("LogisticsFragment", "Error fetching collaborator email", e));
         }
     }
 
@@ -167,12 +164,14 @@ public class LogisticsFragment extends Fragment {
             ));
 
             // Log the UID and email pairing for debugging
-            Log.d("LogisticsFragment", "Rendering button for collaborator: " + collaboratorEmail + " with UID: " + collaboratorUID);
+            Log.d("LogisticsFragment", "Rendering button for collaborator: "
+                    + collaboratorEmail + " with UID: " + collaboratorUID);
 
             // Pass the correct UID to displayCollaboratorNotes
             collaboratorButton.setOnClickListener(v -> {
                 // Log to confirm the correct UID is passed
-                Log.d("LogisticsFragment", "Displaying notes for collaborator UID: " + collaboratorUID);
+                Log.d("LogisticsFragment",
+                        "Displaying notes for collaborator UID: " + collaboratorUID);
                 displayCollaboratorNotes(collaboratorEmail, collaboratorUID);
             });
 
@@ -182,12 +181,14 @@ public class LogisticsFragment extends Fragment {
 
     private void displayCollaboratorNotes(String collaboratorEmail, String collaboratorUID) {
         // Debugging log to confirm the UID of the collaborator whose notes are being retrieved
-        Log.d("LogisticsFragment", "Fetching notes for collaborator: " + collaboratorEmail + " (UID: " + collaboratorUID + ")");
+        Log.d("LogisticsFragment", "Fetching notes for collaborator: "
+                + collaboratorEmail + " (UID: " + collaboratorUID + ")");
 
         db.collection("User").document(collaboratorUID).get().addOnSuccessListener(userDoc -> {
             if (userDoc.exists()) {
                 List<String> notes = (List<String>) userDoc.get("notes");
-                StringBuilder notesText = new StringBuilder("Notes for " + collaboratorEmail + ":\n");
+                StringBuilder notesText = new StringBuilder("Notes for "
+                        + collaboratorEmail + ":\n");
 
                 if (notes != null && !notes.isEmpty()) {
                     for (String note : notes) {
@@ -242,13 +243,14 @@ public class LogisticsFragment extends Fragment {
 
         // Get the current user document from Firestore
         db.collection("User")
-                .whereEqualTo("authUID", currentUserUID)  // Ensure you're querying by the correct field
+                .whereEqualTo("authUID", currentUserUID)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             // Log the document data for debugging
-                            Log.d("LogisticsFragment", document.getId() + " => " + document.getData());
+                            Log.d("LogisticsFragment",
+                                    document.getId() + " => " + document.getData());
 
                             // Retrieve existing notes or initialize if empty
                             ArrayList<String> userNotes = (ArrayList<String>) document.get("notes");
@@ -263,10 +265,13 @@ public class LogisticsFragment extends Fragment {
                             document.getReference().update("notes", userNotes)
                                     .addOnCompleteListener(updateTask -> {
                                         if (updateTask.isSuccessful()) {
-                                            Log.d("LogisticsFragment", "Successfully added user note");
-                                            Toast.makeText(getContext(), "New note added: " + note, Toast.LENGTH_SHORT).show();
+                                            Log.d("LogisticsFragment",
+                                                    "Successfully added user note");
+                                            Toast.makeText(getContext(), "New note added: "
+                                                    + note, Toast.LENGTH_SHORT).show();
                                         } else {
-                                            Log.d("Add Note", "Error updating user note: ", updateTask.getException());
+                                            Log.d("Add Note", "Error updating user note: ",
+                                                    updateTask.getException());
                                         }
                                     });
                         }
@@ -310,7 +315,6 @@ public class LogisticsFragment extends Fragment {
                                         if (userDoc.exists()) {
                                             String activeTrip = userDoc.getString("activeTrip");
                                             if (activeTrip != null) {
-                                                // Add the collaborator's ID to the current user's trip
                                                 addCollaboratorToTrip(collaboratorId, activeTrip);
                                             } else {
                                                 showToast("You don't have an active trip.");
@@ -319,7 +323,8 @@ public class LogisticsFragment extends Fragment {
                                             showToast("Error: Current user not found.");
                                         }
                                     })
-                                    .addOnFailureListener(e -> showToast("Error fetching current user details"));
+                                    .addOnFailureListener(e ->
+                                            showToast("Error fetching current user details"));
                         }
                     }
                 })
@@ -332,7 +337,9 @@ public class LogisticsFragment extends Fragment {
             if (tripDoc.exists()) {
                 // Get current list of User IDs from the trip document
                 List<String> userIds = (List<String>) tripDoc.get("User IDs");
-                if (userIds == null) userIds = new ArrayList<>();
+                if (userIds == null) {
+                    userIds = new ArrayList<>();
+                }
 
                 // Add the collaborator's ID to the user's trip
                 if (!userIds.contains(collaboratorId)) {
@@ -342,15 +349,19 @@ public class LogisticsFragment extends Fragment {
                     tripDoc.getReference().update("User IDs", userIds)
                             .addOnSuccessListener(aVoid -> {
                                 // Update the collaborator's activeTrip field to the new trip
-                                db.collection("User").document(collaboratorId).update("activeTrip", activeTripId)
+                                db.collection("User").document(collaboratorId)
+                                        .update("activeTrip", activeTripId)
                                         .addOnSuccessListener(aVoid1 -> {
                                             // Fetch and render the updated collaborators
                                             fetchAndRenderCollaboratorsFromDB();
                                             showToast("Collaborator added successfully.");
                                         })
-                                        .addOnFailureListener(e -> showToast("Error updating collaborator's active trip"));
+                                        .addOnFailureListener(e ->
+                                                showToast("Error updating "
+                                                        + "collaborator's active trip"));
                             })
-                            .addOnFailureListener(e -> showToast("Error adding collaborator to trip"));
+                            .addOnFailureListener(e ->
+                                    showToast("Error adding collaborator to trip"));
                 } else {
                     showToast("Collaborator is already part of this trip.");
                 }
