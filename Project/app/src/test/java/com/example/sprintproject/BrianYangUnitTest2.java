@@ -103,7 +103,7 @@ public class BrianYangUnitTest2 {
     public void testAccommodationObjectCreation() {
         LocalDateTime checkIn = LocalDateTime.of(2024, 12, 1, 14, 0);
         LocalDateTime checkOut = LocalDateTime.of(2024, 12, 10, 11, 0);
-        Accommodation accommodation = new Accommodation("Paris", "Hotel Luxe", checkIn, checkOut, 2, "Suite");
+        Accommodation accommodation = new Accommodation("Paris", "Hotel Luxe", checkIn.toString(), checkOut, 2, "Suite");
 
         assertEquals("Paris", accommodation.getLocation());
         assertEquals("Hotel Luxe", accommodation.getHotelName());

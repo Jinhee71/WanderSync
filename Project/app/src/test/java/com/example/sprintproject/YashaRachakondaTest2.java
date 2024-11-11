@@ -1,9 +1,10 @@
 package com.example.sprintproject;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Destination;
+import com.example.sprintproject.model.Dining;
 
 import org.junit.Test;
 
@@ -22,20 +23,26 @@ public class YashaRachakondaTest2 {
         assertEquals("Duration should be 8 days", 8L, destination.durationCalc());
     }
 
-    @Test // Test Accommodation object creation with parameters
-    public void testAccommodationObjectCreation() {
-        LocalDateTime checkIn = LocalDateTime.of(2024, 12, 1, 14, 0);
-        LocalDateTime checkOut = LocalDateTime.of(2024, 12, 10, 11, 0);
-        Accommodation accommodation = new Accommodation("Paris", "Hotel Luxe", checkIn, checkOut, 2, "Suite");
+    @Test
+    public void testDiningObjectCreation() {
+        // Test data
+        String expectedWebsite = "http://example.com";
+        String expectedLocation = "Test Location";
+        LocalDateTime expectedReservationTime = LocalDateTime.of(2024, 11, 15, 18, 30);
+        long expectedReview = 5;
 
-        assertEquals("Paris", accommodation.getLocation());
-        assertEquals("Hotel Luxe", accommodation.getHotelName());
-        assertEquals(checkIn, accommodation.getCheckIn());
-        assertEquals(checkOut, accommodation.getCheckOut());
-        assertEquals(2, accommodation.getNumberOfRooms());
-        assertEquals("Suite", accommodation.getRoomType());
+        // Create Dining object with parameters
+        Dining dining = new Dining(expectedWebsite, expectedLocation, expectedReservationTime, expectedReview);
+
+        // Verify that the object is not null
+        assertNotNull(dining);
+
+        // Verify that all parameters were set correctly
+        assertEquals(expectedWebsite, dining.getWebsite());
+        assertEquals(expectedLocation, dining.getLocation());
+        assertEquals(expectedReservationTime, dining.getReservationTime());
+        assertEquals(expectedReview, dining.getReview());
     }
-
 }
 
 
