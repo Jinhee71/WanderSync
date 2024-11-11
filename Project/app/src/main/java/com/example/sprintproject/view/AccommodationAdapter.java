@@ -19,6 +19,7 @@ public class AccommodationAdapter extends BaseAdapter {
 
     private Context context;
     private List<Accommodation> accommodations;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public AccommodationAdapter(Context context, List<Accommodation> accommodations) {
         this.context = context;
@@ -62,22 +63,27 @@ public class AccommodationAdapter extends BaseAdapter {
         numOfRoomsView.setText("Number of Rooms: " + accommodation.getNumberOfRooms());
         roomTypeView.setText("Room Type: " + accommodation.getRoomType());
 
-        // Mark expired reservations (past check-out date)
-        if (isPastDate(accommodation.getCheckOut())) {
-            convertView.setBackgroundColor(Color.LTGRAY); // Example: mark expired as light gray
+        LocalDateTime checkInTime = accommodation.getCheckinTime();
+        String formattedCheckIn = checkInTime != null ? checkInTime.format(formatter) : "No Time Provided";
+        checkInView.setText("Check-in: " + formattedCheckIn);
+
+        boolean isPastDue = (checkInTime != null && checkInTime.isBefore(LocalDateTime.now())) || isPastDate(accommodation.getCheckOut());
+
+        if (isPastDue) {
+            convertView.setBackgroundColor(Color.LTGRAY); // Mark expired as light gray
+        } else {
+            convertView.setBackgroundColor(Color.WHITE); // Reset color for non-past due reservations
         }
 
         return convertView;
     }
 
-    private boolean isPastDate(String checkOut) {
+    private boolean isPastDate(String dateTimeStr) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime checkOutDate = LocalDateTime.parse(checkOut, formatter);
-            return checkOutDate.isBefore(LocalDateTime.now());
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, formatter);
+            return dateTime.isBefore(LocalDateTime.now());
         } catch (Exception e) {
             return false;
         }
     }
 }
-
