@@ -29,7 +29,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +45,12 @@ public class AccommodationFragment extends Fragment {
     private final SortByCheckOutStrategy checkOutStrategy = new SortByCheckOutStrategy();
     private final SortByLocationStrategy locationStrategy = new SortByLocationStrategy();
 
-    public AccommodationFragment() {}
+    public AccommodationFragment() { }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Initialize FirebaseFirestore instance
         db = FirebaseFirestore.getInstance();
 
@@ -81,10 +81,12 @@ public class AccommodationFragment extends Fragment {
             // Set up the adapter for the list view
             ListView accommodationListView = view.findViewById(R.id.accommodation_list);
             accommodations = new ArrayList<>();  // Initialize the accommodation list
-            adapter = new AccommodationAdapter(getContext(), accommodations);  // Pass context to adapter
+            adapter = new AccommodationAdapter(getContext(),
+                    accommodations);  // Pass context to adapter
             accommodationListView.setAdapter(adapter);
         } else {
-            Log.e("AccommodationFragment", "Activity or context is null. Unable to access UI components.");
+            Log.e("AccommodationFragment",
+                    "Activity or context is null. Unable to access UI components.");
         }
 
         loadActiveTrip();
@@ -120,11 +122,15 @@ public class AccommodationFragment extends Fragment {
                             if (activeTripId != null) {
                                 loadTripData(activeTripId);
                             } else {
-                                Toast.makeText(getContext(), "No active trip found for this user", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),
+                                        "No active trip found for this user",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
-                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Error loading active trip", Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> Toast.makeText(getContext(),
+                            "Error loading active trip",
+                            Toast.LENGTH_SHORT).show());
         } else {
             Log.e("AccommodationFragment", "Firestore instance is null");
         }
@@ -143,7 +149,9 @@ public class AccommodationFragment extends Fragment {
                         }
                     }
                 })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error loading trip", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(getContext(),
+                        "Error loading trip",
+                        Toast.LENGTH_SHORT).show());
     }
 
     private void showAddAccommodationDialog() {
@@ -183,23 +191,28 @@ public class AccommodationFragment extends Fragment {
 
             // Validate that the dates are in correct format (e.g. "yyyy-MM-dd HH:mm")
             if (checkIn.isEmpty() || checkOut.isEmpty()) {
-                Toast.makeText(getContext(), "Please enter valid check-in and check-out dates", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        "Please enter valid check-in and check-out dates",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Create a new accommodation object
-            Accommodation newAccommodation = new Accommodation(location, "Hotel Name", checkIn, checkOut, numOfRooms, roomType);
+            Accommodation newAccommodation = new Accommodation(location,
+                    "Hotel Name", checkIn, checkOut, numOfRooms, roomType);
 
             // Add the new accommodation to the trip's accommodations list in Firestore
             db.collection("Trip").document(activeTripId)
                     .update("accommodations", FieldValue.arrayUnion(newAccommodation))
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(getContext(), "Accommodation added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                "Accommodation added", Toast.LENGTH_SHORT).show();
                         accommodations.add(newAccommodation);
                         adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     })
-                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Error adding accommodation", Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> Toast.makeText(getContext(),
+                            "Error adding accommodation", Toast.LENGTH_SHORT).show());
         });
 
         dialog.show();

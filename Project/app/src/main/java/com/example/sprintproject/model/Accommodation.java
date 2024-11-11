@@ -19,7 +19,8 @@ public class Accommodation {
     }
 
     // Constructor
-    public Accommodation(String location, String hotelName, String checkIn, String checkOut, int numberOfRooms, String roomType) {
+    public Accommodation(String location, String hotelName,
+                         String checkIn, String checkOut, int numberOfRooms, String roomType) {
         this.location = location;
         this.hotelName = hotelName;
         this.checkIn = checkIn;
@@ -41,7 +42,9 @@ public class Accommodation {
         return checkIn;
     }
 
-    public LocalDateTime getCheckinTime() {return parseCheckInTime();}
+    public LocalDateTime getCheckinTime() {
+        return parseCheckInTime();
+    }
 
     private LocalDateTime parseCheckInTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
