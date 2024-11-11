@@ -1,18 +1,22 @@
 package com.example.sprintproject.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Accommodation;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AccommodationAdapter extends BaseAdapter {
+
     private Context context;
     private List<Accommodation> accommodations;
 
@@ -53,12 +57,27 @@ public class AccommodationAdapter extends BaseAdapter {
 
         locationView.setText(accommodation.getLocation());
         hotelNameView.setText(accommodation.getHotelName());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        checkInView.setText("Check-in: " + accommodation.getCheckIn().format(formatter));
-        checkOutView.setText("Check-out: " + accommodation.getCheckOut().format(formatter));
+        checkInView.setText("Check-in: " + accommodation.getCheckIn());
+        checkOutView.setText("Check-out: " + accommodation.getCheckOut());
         numOfRoomsView.setText("Number of Rooms: " + accommodation.getNumberOfRooms());
-        roomTypeView.setText(accommodation.getRoomType());
+        roomTypeView.setText("Room Type: " + accommodation.getRoomType());
+
+        // Mark expired reservations (past check-out date)
+        if (isPastDate(accommodation.getCheckOut())) {
+            convertView.setBackgroundColor(Color.LTGRAY); // Example: mark expired as light gray
+        }
 
         return convertView;
     }
+
+    private boolean isPastDate(String checkOut) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime checkOutDate = LocalDateTime.parse(checkOut, formatter);
+            return checkOutDate.isBefore(LocalDateTime.now());
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
+
