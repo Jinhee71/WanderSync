@@ -21,6 +21,40 @@
             android:layout_gravity="center_horizontal"
             android:paddingBottom="16dp"/>
 
+        <!-- Sorting Buttons (Sort by Check-In, Check-Out, Location) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="16dp">
+
+            <!-- Sort by Check-In Button -->
+            <Button
+                android:id="@+id/sort_by_check_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort by Check-In"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Sort by Check-Out Button -->
+            <Button
+                android:id="@+id/sort_by_check_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort by Check-Out"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Sort by Location Button -->
+            <Button
+                android:id="@+id/sort_by_location_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort by Check-Out"
+                android:layout_marginEnd="8dp"/>
+
+        </LinearLayout>
+
         <!-- ListView to display accommodations -->
         <ListView
             android:id="@+id/accommodation_list"
@@ -29,6 +63,7 @@
             android:layout_weight="1"
             android:divider="@android:color/darker_gray"
             android:dividerHeight="1dp"/>
+
     </LinearLayout>
 
     <!-- Floating action button to add a new accommodation in bottom-right corner -->
