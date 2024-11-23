@@ -11,11 +11,9 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.example.sprintproject.R;
-
 import com.example.sprintproject.model.TravelCommunity;
 
 import java.util.List;
-
 
 public class CommunityAdapter extends BaseAdapter {
     private Context context;
@@ -25,7 +23,6 @@ public class CommunityAdapter extends BaseAdapter {
         this.context = context;
         this.posts = posts;
     }
-
 
     @Override
     public int getCount() {
@@ -52,13 +49,14 @@ public class CommunityAdapter extends BaseAdapter {
         TravelCommunity travelPost = posts.get(position);
 
         // Set up the views
-        //TextView usernameView = convertView.findViewById(R.id.username);
         TextView destinationView = convertView.findViewById(R.id.destination);
         TextView durationView = convertView.findViewById(R.id.duration);
         ImageView arrowView = convertView.findViewById(R.id.arrowIcon);
-        
-        // Optionally set an icon for the arrow
-        arrowView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_right));
+
+        destinationView.setText(travelPost.getDestination());
+
+        durationView.setText("Duration: " + travelPost.getDuration() + " days");
+
 
         return convertView;
     }

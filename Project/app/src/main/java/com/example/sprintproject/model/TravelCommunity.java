@@ -1,68 +1,80 @@
 package com.example.sprintproject.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public class TravelCommunity {
-    private LocalDateTime duration;
-    private List<String> destination;
-    private List<String> accommodation;
-    private List<String> dining;
-    private List<String> transportation;
+    private long duration;
+    private String destination;
+    private String accommodation;
+    private String dining;
+    private String transportation;
     private String notes;
 
+    public TravelCommunity() {}
 
-    public TravelCommunity(){}
-
-    public TravelCommunity(LocalDateTime duration, List<String> destination,
-                           List<String> accommodation, List<String> dining,
-                           List<String> transportation, String notes) {
+    public TravelCommunity(long duration, String destination,
+                           String accommodation, String dining,
+                           String transportation, String notes) {
         this.duration = duration;
-        this. destination = destination;
+        this.destination = destination;
         this.accommodation = accommodation;
         this.dining = dining;
         this.transportation = transportation;
         this.notes = notes;
     }
 
-    public LocalDateTime getDuration() {
+    public TravelCommunity(long duration, String destination,
+                           String accommodation, String dining,
+                           String notes) {
+        this.duration = duration;
+        this.destination = destination;
+        this.accommodation = accommodation;
+        this.dining = dining;
+        this.notes = notes;
+    }
+
+    public long getDuration() {
         return this.duration;
     }
-    public void setDuration(LocalDateTime duration) {
+
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
-    public List<String> getDestination() {
+    public String getDestination() {
         return this.destination;
     }
-    public void setDestination(List<String> destination) {
+
+    public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public List<String> getAccommodation() {
+    public String getAccommodation() {
         return this.accommodation;
     }
-    public void setAccommodation(List<String> accommodation) {
+
+    public void setAccommodation(String accommodation) {
         this.accommodation = accommodation;
     }
 
-    public List<String> getDining() {
+    public String getDining() {
         return this.dining;
     }
-    public void setDining(List<String> dining) {
+
+    public void setDining(String dining) {
         this.dining = dining;
     }
 
-    public List<String> getTransportation() {
+    public String getTransportation() {
         return this.transportation;
     }
-    public void setTransportation(List<String> transportation) {
+
+    public void setTransportation(String transportation) {
         this.transportation = transportation;
     }
 
     public String getNotes() {
         return this.notes;
     }
+
     public void setNotes(String notes) {
         this.notes = notes;
     }
