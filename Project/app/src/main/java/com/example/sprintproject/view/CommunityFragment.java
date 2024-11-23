@@ -60,6 +60,20 @@ public class CommunityFragment extends Fragment {
         addPostButton.setOnClickListener(v -> showAddPostDialog());
     }
 
-    
-    private void showAddPostDialog(){}
+
+    private void showAddPostDialog() {
+        //create a new AlertDialog.Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        // Inflate the custom layout for the dialog
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_new_travel_post, null);
+        builder.setView(dialogView);
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+    }
 }
