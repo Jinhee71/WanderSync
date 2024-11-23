@@ -127,12 +127,12 @@
             android:gravity="top"
             android:layout_marginBottom="8dp" />
 
-        <!-- Add Post Button -->
+        <!-- Save Post Button -->
         <Button
-            android:id="@+id/button_add_post"
+            android:id="@+id/savePostButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="post"
+            android:text="Save Post"
             android:layout_marginTop="16dp" />
 
     </LinearLayout>
