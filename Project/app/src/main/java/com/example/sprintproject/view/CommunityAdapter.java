@@ -56,9 +56,7 @@ public class CommunityAdapter extends BaseAdapter {
         TextView destinationView = convertView.findViewById(R.id.destination);
         TextView durationView = convertView.findViewById(R.id.duration);
         ImageView arrowView = convertView.findViewById(R.id.arrowIcon);
-
-        //
-
+        
         // Optionally set an icon for the arrow
         arrowView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_right));
 

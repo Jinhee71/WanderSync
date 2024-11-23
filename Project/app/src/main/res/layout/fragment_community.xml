@@ -50,7 +50,7 @@
 
         </LinearLayout>
 
-        <!-- Floating action button to add a new reservation in bottom-right corner -->
+        <!-- Floating action button to create a new post in bottom-right corner -->
         <ImageButton
             android:id="@+id/addPostButton"
             android:layout_width="80dp"
@@ -59,7 +59,7 @@
             android:layout_margin="16dp"
             android:background="@android:color/holo_green_light"
             android:src="@drawable/ic_add_dining_reservation"
-            android:contentDescription="Add Dining Reservation" />
+            android:contentDescription="Add Community Post" />
 
     </FrameLayout>
 </ScrollView>
