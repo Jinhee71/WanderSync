@@ -1,8 +1,5 @@
 package com.example.sprintproject.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public class TravelCommunity {
     private String duration;
     private List<String> destination;
@@ -13,6 +10,7 @@ public class TravelCommunity {
     private long timestamp;  // Add a timestamp field
 
     public TravelCommunity() {}
+
 
     public TravelCommunity(String duration, List<String> destination,
                            List<String> accommodation, List<String> dining,
@@ -34,37 +32,42 @@ public class TravelCommunity {
         this.duration = duration;
     }
 
-    public List<String> getDestination() {
+    public String getDestination() {
         return this.destination;
     }
-    public void setDestination(List<String> destination) {
+
+    public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public List<String> getAccommodation() {
+    public String getAccommodation() {
         return this.accommodation;
     }
-    public void setAccommodation(List<String> accommodation) {
+
+    public void setAccommodation(String accommodation) {
         this.accommodation = accommodation;
     }
 
-    public List<String> getDining() {
+    public String getDining() {
         return this.dining;
     }
-    public void setDining(List<String> dining) {
+
+    public void setDining(String dining) {
         this.dining = dining;
     }
 
-    public List<String> getTransportation() {
+    public String getTransportation() {
         return this.transportation;
     }
-    public void setTransportation(List<String> transportation) {
+
+    public void setTransportation(String transportation) {
         this.transportation = transportation;
     }
 
     public String getNotes() {
         return this.notes;
     }
+
     public void setNotes(String notes) {
         this.notes = notes;
     }
