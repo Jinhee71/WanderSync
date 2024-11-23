@@ -4,31 +4,33 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class TravelCommunity {
-    private LocalDateTime duration;
+    private String duration;
     private List<String> destination;
     private List<String> accommodation;
     private List<String> dining;
     private List<String> transportation;
     private String notes;
+    private long timestamp;  // Add a timestamp field
 
+    public TravelCommunity() {}
 
-    public TravelCommunity(){}
-
-    public TravelCommunity(LocalDateTime duration, List<String> destination,
+    public TravelCommunity(String duration, List<String> destination,
                            List<String> accommodation, List<String> dining,
-                           List<String> transportation, String notes) {
+                           List<String> transportation, String notes, long timestamp) {
         this.duration = duration;
-        this. destination = destination;
+        this.destination = destination;
         this.accommodation = accommodation;
         this.dining = dining;
         this.transportation = transportation;
         this.notes = notes;
+        this.timestamp = timestamp;  // Initialize timestamp
     }
 
-    public LocalDateTime getDuration() {
+    // Getter and Setter methods
+    public String getDuration() {
         return this.duration;
     }
-    public void setDuration(LocalDateTime duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
@@ -65,5 +67,12 @@ public class TravelCommunity {
     }
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public long getTimestamp() {
+        return this.timestamp;
+    }
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
