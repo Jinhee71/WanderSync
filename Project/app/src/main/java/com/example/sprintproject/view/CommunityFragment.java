@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -14,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.TravelCommunity;
+import com.example.sprintproject.model.TravelCommunityFactory;
+import com.example.sprintproject.viewmodel.CommunityViewModel;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,18 +29,21 @@ public class CommunityFragment extends Fragment {
 
     private List<TravelCommunity> travelPosts;
     private CommunityAdapter adapter;
+    private CommunityViewModel communityViewModel;
+
 
     public CommunityFragment() {}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_community, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize the Travel Post List
@@ -60,8 +65,6 @@ public class CommunityFragment extends Fragment {
     private void showAddPostDialog() {
         // Create a new AlertDialog.Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        // Inflate the custom layout for the dialog
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_new_travel_post, null);
         builder.setView(dialogView);
@@ -105,8 +108,15 @@ public class CommunityFragment extends Fragment {
             travelPosts.add(newPost);
             adapter.notifyDataSetChanged();
 
+
             // Dismiss the dialog
             dialog.dismiss();
         });
+
     }
+
+
+        dialog.show();
+    }
+
 }

@@ -1,41 +1,34 @@
 package com.example.sprintproject.model;
 
 public class TravelCommunity {
-    private long duration;
-    private String destination;
-    private String accommodation;
-    private String dining;
-    private String transportation;
+    private String duration;
+    private List<String> destination;
+    private List<String> accommodation;
+    private List<String> dining;
+    private List<String> transportation;
     private String notes;
+    private long timestamp;  // Add a timestamp field
 
     public TravelCommunity() {}
 
-    public TravelCommunity(long duration, String destination,
-                           String accommodation, String dining,
-                           String transportation, String notes) {
+
+    public TravelCommunity(String duration, List<String> destination,
+                           List<String> accommodation, List<String> dining,
+                           List<String> transportation, String notes, long timestamp) {
         this.duration = duration;
         this.destination = destination;
         this.accommodation = accommodation;
         this.dining = dining;
         this.transportation = transportation;
         this.notes = notes;
+        this.timestamp = timestamp;  // Initialize timestamp
     }
 
-    public TravelCommunity(long duration, String destination,
-                           String accommodation, String dining,
-                           String notes) {
-        this.duration = duration;
-        this.destination = destination;
-        this.accommodation = accommodation;
-        this.dining = dining;
-        this.notes = notes;
-    }
-
-    public long getDuration() {
+    // Getter and Setter methods
+    public String getDuration() {
         return this.duration;
     }
-
-    public void setDuration(long duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
@@ -77,5 +70,12 @@ public class TravelCommunity {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public long getTimestamp() {
+        return this.timestamp;
+    }
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
