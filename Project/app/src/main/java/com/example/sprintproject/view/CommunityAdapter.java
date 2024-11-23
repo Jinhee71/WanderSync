@@ -12,16 +12,16 @@ import androidx.core.content.ContextCompat;
 
 import com.example.sprintproject.R;
 
-import com.example.sprintproject.model.TravelPost;
-import java.time.format.DateTimeFormatter;
+import com.example.sprintproject.model.TravelCommunity;
+
 import java.util.List;
 
 
 public class CommunityAdapter extends BaseAdapter {
     private Context context;
-    private List<TravelPost> posts;
+    private List<TravelCommunity> posts;
 
-    public CommunityAdapter(Context context, List<TravelPost> posts) {
+    public CommunityAdapter(Context context, List<TravelCommunity> posts) {
         this.context = context;
         this.posts = posts;
     }
@@ -49,17 +49,15 @@ public class CommunityAdapter extends BaseAdapter {
         }
 
         // Get the current travel post
-        TravelPost travelPost = posts.get(position);
+        TravelCommunity travelPost = posts.get(position);
 
         // Set up the views
-        TextView usernameView = convertView.findViewById(R.id.username);
+        //TextView usernameView = convertView.findViewById(R.id.username);
         TextView destinationView = convertView.findViewById(R.id.destination);
         TextView durationView = convertView.findViewById(R.id.duration);
         ImageView arrowView = convertView.findViewById(R.id.arrowIcon);
 
-        usernameView.setText(travelPost.getUsername());
-        destinationView.setText(travelPost.getDestination());
-        durationView.setText(travelPost.getDuration());
+        //
 
         // Optionally set an icon for the arrow
         arrowView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_right));
