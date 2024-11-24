@@ -73,10 +73,11 @@ public class CreateAccountViewModel extends ViewModel {
                     Log.d("Firestore", "Trip created with ID: " + tripId);
 
                     addUserToFirestore(firebaseUser, tripId);
+                    TravelCommunityViewModel viewModel = new TravelCommunityViewModel();
+                    viewModel.populateDefaultTravelCommunity(tripId);
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error creating trip document", e));
-        TravelCommunityViewModel viewModel = new TravelCommunityViewModel();
-        viewModel.populateDefaultTravelCommunity();
+
     }
 
     private void addUserToFirestore(FirebaseUser firebaseUser, String tripId) {
