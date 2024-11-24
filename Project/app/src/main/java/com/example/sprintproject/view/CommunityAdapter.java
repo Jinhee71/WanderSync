@@ -42,7 +42,8 @@ public class CommunityAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_travel_community, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_travel_community,
+                    parent, false);
         }
 
         // Get the current travel post
