@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.TravelCommunity;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 
@@ -63,6 +65,32 @@ public class CommunityAdapter extends BaseAdapter {
         // Optionally set an icon for the arrow
         arrowView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_right));
 
+        arrowView.setOnClickListener(v -> {
+            Toast.makeText(context, "Navigating to: ", Toast.LENGTH_SHORT).show();
+            // Create and display the BottomSheetDialog
+            View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.trip_info, null);
+
+            // Use different variable names for Bottom Sheet
+            TextView bottomSheetDestinationView = bottomSheetView.findViewById(R.id.destination_text);
+            TextView bottomSheetDurationView = bottomSheetView.findViewById(R.id.duration_text);
+            TextView bottomSheetAccView = bottomSheetView.findViewById(R.id.accomodation_text);
+            TextView bottomSheetDineView = bottomSheetView.findViewById(R.id.dining_text);
+            TextView bottomSheetTView = bottomSheetView.findViewById(R.id.transportation_text);
+            TextView bottomSheetNotesView = bottomSheetView.findViewById(R.id.notes_text);
+
+            // Populate the BottomSheet with data
+            bottomSheetDestinationView.setText(travelPost.getDestination());
+            bottomSheetDurationView.setText("Duration: " + travelPost.getDuration() + " days");
+            bottomSheetAccView.setText("Accomodation: " + travelPost.getAccommodations());
+            bottomSheetDineView.setText("Dining: "+travelPost.getDiningReservations());
+            bottomSheetTView.setText("Default Transportation");
+            bottomSheetNotesView.setText("Notes: "+travelPost.getNotes());
+
+            // Build and show the BottomSheetDialog
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+            bottomSheetDialog.setContentView(bottomSheetView);
+            bottomSheetDialog.show();
+        });
         return convertView;
     }
 }
