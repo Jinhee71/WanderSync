@@ -19,9 +19,9 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.TravelCommunity;
 import com.example.sprintproject.viewmodel.TravelCommunityViewModel;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class CommunityFragment extends Fragment {
     private TravelCommunityViewModel travelCommunityViewModel;
 
     public CommunityFragment() {
-
+        // Required empty constructor
     }
 
     @Nullable
@@ -92,15 +92,22 @@ public class CommunityFragment extends Fragment {
                 String diningReservation = diningReservationInput.getText().toString().trim();
                 String notes = notesInput.getText().toString().trim();
 
+                // Validate required fields
                 if (TextUtils.isEmpty(startDateStr) || TextUtils.isEmpty(endDateStr)
                         || TextUtils.isEmpty(destination)) {
-                    throw new IllegalArgumentException("Start Date, End Date, and Destination "
-                            + "are required.");
+                    throw new IllegalArgumentException("Start Date, End Date, and Destination are required.");
                 }
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-                LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+                LocalDate startDate;
+                LocalDate endDate;
+
+                try {
+                    startDate = LocalDate.parse(startDateStr, formatter);
+                    endDate = LocalDate.parse(endDateStr, formatter);
+                } catch (DateTimeParseException e) {
+                    throw new IllegalArgumentException("Dates must be in the format yyyy-MM-dd.");
+                }
 
                 if (endDate.isBefore(startDate)) {
                     throw new IllegalArgumentException("End Date must be after Start Date.");
@@ -108,18 +115,28 @@ public class CommunityFragment extends Fragment {
 
                 long duration = ChronoUnit.DAYS.between(startDate, endDate);
 
-                // Generate timestamp
-                long timestamp = Instant.now().toEpochMilli();
+                // Fetch the username from Firebase
+                travelCommunityViewModel.fetchUsername(username -> {
+                    if (username == null) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Error")
+                                .setMessage("Failed to fetch username. Please try again.")
+                                .setPositiveButton("OK", null)
+                                .show();
+                        return;
+                    }
 
-                TravelCommunity newPost = new TravelCommunity(duration, destination,
-                        accommodations, diningReservation, notes);
-                travelPosts.add(newPost);
-                adapter.notifyDataSetChanged();
+                    // Call ViewModel to add the new post
+                    travelCommunityViewModel.addTravelCommunity(duration, destination,
+                            accommodations, diningReservation, notes);
 
-                travelCommunityViewModel.addTravelCommunity(duration, destination,
-                        accommodations, diningReservation, notes);
+                    TravelCommunity newPost = new TravelCommunity(duration, destination,
+                            accommodations, diningReservation, notes, username);
+                    travelPosts.add(newPost);
+                    adapter.notifyDataSetChanged();
 
-                dialog.dismiss();
+                    dialog.dismiss();
+                });
             } catch (Exception e) {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Invalid Input")
