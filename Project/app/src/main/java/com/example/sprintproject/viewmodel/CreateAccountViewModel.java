@@ -13,6 +13,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.sprintproject.viewmodel.TravelCommunityViewModel;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,8 +73,11 @@ public class CreateAccountViewModel extends ViewModel {
                     Log.d("Firestore", "Trip created with ID: " + tripId);
 
                     addUserToFirestore(firebaseUser, tripId);
+                    TravelCommunityViewModel viewModel = new TravelCommunityViewModel();
+                    viewModel.populateDefaultTravelCommunity(tripId);
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error creating trip document", e));
+
     }
 
     private void addUserToFirestore(FirebaseUser firebaseUser, String tripId) {
@@ -116,6 +121,9 @@ public class CreateAccountViewModel extends ViewModel {
                         }
                     }
                 });
+
     }
+
+
 }
 
