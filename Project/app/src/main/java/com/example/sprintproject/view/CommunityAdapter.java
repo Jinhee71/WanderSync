@@ -52,17 +52,17 @@ public class CommunityAdapter extends BaseAdapter {
         TravelCommunity travelPost = posts.get(position);
 
         // Set up the views
+        TextView usernameView = convertView.findViewById(R.id.username);
         TextView destinationView = convertView.findViewById(R.id.destination);
         TextView durationView = convertView.findViewById(R.id.duration);
         ImageView arrowView = convertView.findViewById(R.id.arrowIcon);
 
-        // Set the destination
+        usernameView.setText(travelPost.getUsername());
+
         destinationView.setText(travelPost.getDestination());
 
-        // Set the duration (assuming it's in days as a long value)
         durationView.setText("Duration: " + travelPost.getDuration() + " days");
 
-        // Optionally set an icon for the arrow
         arrowView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_right));
 
         arrowView.setOnClickListener(v -> {
