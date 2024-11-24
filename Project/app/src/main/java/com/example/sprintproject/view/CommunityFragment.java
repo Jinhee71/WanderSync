@@ -104,8 +104,6 @@ public class CommunityFragment extends Fragment {
 
                 long duration = ChronoUnit.DAYS.between(startDate, endDate);
 
-                // Generate timestamp
-                long timestamp = Instant.now().toEpochMilli();
 
                 TravelCommunity newPost = new TravelCommunity(duration, destination, accommodations, diningReservation, notes);
                 travelPosts.add(newPost);

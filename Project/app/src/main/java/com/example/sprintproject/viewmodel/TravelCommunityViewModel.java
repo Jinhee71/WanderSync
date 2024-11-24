@@ -45,15 +45,7 @@ public class TravelCommunityViewModel extends ViewModel {
                                             String accommodation = document.getString("Accommodation");
                                             String dining = document.getString("Dining");
 
-                                            long duration = 0;
-                                            String startDateStr = document.getString("StartDate");
-                                            String endDateStr = document.getString("EndDate");
-                                            if (startDateStr != null && endDateStr != null) {
-                                                LocalDate startDate = LocalDate.parse(startDateStr);
-                                                LocalDate endDate = LocalDate.parse(endDateStr);
-                                                duration = ChronoUnit.DAYS.between(startDate, endDate);
-                                            }
-
+                                            long duration = document.getLong("Duration");
                                             travelCommunities.add(new TravelCommunity(duration, destination, accommodation, dining, notes));
                                         } catch (Exception e) {
                                             Log.w("TravelCommunityViewModel", "Error parsing document: " + document.getId(), e);
