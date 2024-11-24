@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/destination_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Destination"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:id="@+id/duration_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Duration"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/accomodation_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accomodation"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/dining_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dining"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/transportation_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Transportation"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/notes_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notes"
+        android:textSize="16sp" />
+</LinearLayout>

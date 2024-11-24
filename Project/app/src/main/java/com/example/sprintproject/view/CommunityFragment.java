@@ -64,6 +64,7 @@ public class CommunityFragment extends Fragment {
 
         ImageButton addPostButton = view.findViewById(R.id.addPostButton);
         addPostButton.setOnClickListener(v -> showAddPostDialog());
+
     }
 
     private void showAddPostDialog() {
