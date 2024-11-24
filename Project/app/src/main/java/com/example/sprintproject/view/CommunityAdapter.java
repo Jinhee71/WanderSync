@@ -1,7 +1,6 @@
 package com.example.sprintproject.view;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.core.content.ContextCompat;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.TravelCommunity;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class CommunityAdapter extends BaseAdapter {
@@ -55,18 +53,11 @@ public class CommunityAdapter extends BaseAdapter {
         TextView durationView = convertView.findViewById(R.id.duration);
         ImageView arrowView = convertView.findViewById(R.id.arrowIcon);
 
-        // Join the lists into a single string (if not empty)
-        String destinations = TextUtils.join(", ", travelPost.getDestination());
-        String accommodations = TextUtils.join(", ", travelPost.getAccommodation());
-        String dining = TextUtils.join(", ", travelPost.getDining());
-        String transportation = TextUtils.join(", ", travelPost.getTransportation());
+        // Set the destination
+        destinationView.setText(travelPost.getDestination());
 
-        // Format the duration as a string
-        String duration = travelPost.getDuration();
-
-        // Set the text values
-        destinationView.setText(destinations);
-        durationView.setText(duration);
+        // Set the duration (assuming it's in days as a long value)
+        durationView.setText("Duration: " + travelPost.getDuration() + " days");
 
         // Optionally set an icon for the arrow
         arrowView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_arrow_right));

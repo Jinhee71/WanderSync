@@ -1,71 +1,61 @@
 package com.example.sprintproject.model;
 
 public class TravelCommunity {
-    private String duration;
-    private List<String> destination;
-    private List<String> accommodation;
-    private List<String> dining;
-    private List<String> transportation;
+    private long duration;
+    private String destination;
+    private String accommodations;
+    private String diningReservations;
     private String notes;
-    private long timestamp;  // Add a timestamp field
+    private long timestamp;
 
-    public TravelCommunity() {}
+    public TravelCommunity() {
+        this.timestamp = System.currentTimeMillis(); // Set timestamp when object is created
+    }
 
-
-    public TravelCommunity(String duration, List<String> destination,
-                           List<String> accommodation, List<String> dining,
-                           List<String> transportation, String notes, long timestamp) {
+    public TravelCommunity(long duration, String destination, String accommodations,
+                           String diningReservations, String notes) {
         this.duration = duration;
         this.destination = destination;
-        this.accommodation = accommodation;
-        this.dining = dining;
-        this.transportation = transportation;
+        this.accommodations = accommodations;
+        this.diningReservations = diningReservations;
         this.notes = notes;
-        this.timestamp = timestamp;  // Initialize timestamp
+        this.timestamp = System.currentTimeMillis(); // Set timestamp when object is created
     }
 
-    // Getter and Setter methods
-    public String getDuration() {
-        return this.duration;
+    public long getDuration() {
+        return duration;
     }
-    public void setDuration(String duration) {
+
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
     public String getDestination() {
-        return this.destination;
+        return destination;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public String getAccommodation() {
-        return this.accommodation;
+    public String getAccommodations() {
+        return accommodations;
     }
 
-    public void setAccommodation(String accommodation) {
-        this.accommodation = accommodation;
+    public void setAccommodations(String accommodations) {
+        this.accommodations = accommodations;
     }
 
-    public String getDining() {
-        return this.dining;
+    public String getDiningReservations() {
+        return diningReservations;
     }
 
-    public void setDining(String dining) {
-        this.dining = dining;
-    }
-
-    public String getTransportation() {
-        return this.transportation;
-    }
-
-    public void setTransportation(String transportation) {
-        this.transportation = transportation;
+    public void setDiningReservations(String diningReservations) {
+        this.diningReservations = diningReservations;
     }
 
     public String getNotes() {
-        return this.notes;
+        return notes;
     }
 
     public void setNotes(String notes) {
@@ -73,9 +63,10 @@ public class TravelCommunity {
     }
 
     public long getTimestamp() {
-        return this.timestamp;
+        return timestamp;
     }
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+
+    public void setTimestamp(long l) {
+        timestamp = l;
     }
 }
