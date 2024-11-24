@@ -7,21 +7,24 @@ public class TravelCommunity {
     private String diningReservations;
     private String notes;
     private long timestamp;
+    private String username;
 
     public TravelCommunity() {
-        this.timestamp = System.currentTimeMillis(); // Set timestamp when object is created
+        this.timestamp = System.currentTimeMillis();
     }
 
     public TravelCommunity(long duration, String destination, String accommodations,
-                           String diningReservations, String notes) {
+                           String diningReservations, String notes, String username) {
         this.duration = duration;
         this.destination = destination;
         this.accommodations = accommodations;
         this.diningReservations = diningReservations;
         this.notes = notes;
-        this.timestamp = System.currentTimeMillis(); // Set timestamp when object is created
+        this.username = username;
+        this.timestamp = System.currentTimeMillis();
     }
 
+    // Getters and Setters
     public long getDuration() {
         return duration;
     }
@@ -66,7 +69,15 @@ public class TravelCommunity {
         return timestamp;
     }
 
-    public void setTimestamp(long l) {
-        timestamp = l;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
