@@ -114,4 +114,38 @@ public class TravelCommunityViewModel extends ViewModel {
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding travel community", e));
     }
+
+    public void populateDefaultTravelCommunity() {
+        Log.d("TravelCommunity", "Populating default travel community...");
+
+        long duration = 7;
+        String destination = "Paris";
+        String accommodation = "Hotel";
+        String dining = "Restaurant";
+        String notes = "Exploring the Eiffel Tower and museums.";
+
+        // Ensure user is authenticated
+        String userId = FirebaseAuth.getInstance().getCurrentUser() != null ? FirebaseAuth.getInstance().getCurrentUser().getUid() : null;
+        if (userId == null) {
+            Log.w("Auth", "User not authenticated.");
+            return;
+        }
+
+        Log.d("TravelCommunity", "japasgas");
+        db.collection("User").document(userId).get()
+                .addOnSuccessListener(userDocument -> {
+                    if (userDocument.exists() && userDocument.contains("activeTrip")) {
+                        String tripId = userDocument.getString("activeTrip");
+
+                        Log.d("TravelCommunity", "Active Trip ID: " + tripId);
+
+                        // Now, add the travel community to the specific trip
+                        addTravelCommunityToTrip(duration, destination, accommodation, dining, notes, tripId);
+                    } else {
+                        Log.w("Firestore", "No active trip found for user.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error retrieving user document", e));
+    }
+
 }
