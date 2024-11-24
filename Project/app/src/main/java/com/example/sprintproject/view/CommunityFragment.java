@@ -21,7 +21,6 @@ import com.example.sprintproject.viewmodel.TravelCommunityViewModel;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -33,11 +32,14 @@ public class CommunityFragment extends Fragment {
     private CommunityAdapter adapter;
     private TravelCommunityViewModel travelCommunityViewModel;
 
-    public CommunityFragment() {}
+    public CommunityFragment() {
+
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_community, container, false);
     }
 
@@ -90,8 +92,10 @@ public class CommunityFragment extends Fragment {
                 String diningReservation = diningReservationInput.getText().toString().trim();
                 String notes = notesInput.getText().toString().trim();
 
-                if (TextUtils.isEmpty(startDateStr) || TextUtils.isEmpty(endDateStr) || TextUtils.isEmpty(destination)) {
-                    throw new IllegalArgumentException("Start Date, End Date, and Destination are required.");
+                if (TextUtils.isEmpty(startDateStr) || TextUtils.isEmpty(endDateStr)
+                        || TextUtils.isEmpty(destination)) {
+                    throw new IllegalArgumentException("Start Date, End Date, and Destination "
+                            + "are required.");
                 }
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -107,11 +111,13 @@ public class CommunityFragment extends Fragment {
                 // Generate timestamp
                 long timestamp = Instant.now().toEpochMilli();
 
-                TravelCommunity newPost = new TravelCommunity(duration, destination, accommodations, diningReservation, notes);
+                TravelCommunity newPost = new TravelCommunity(duration, destination,
+                        accommodations, diningReservation, notes);
                 travelPosts.add(newPost);
                 adapter.notifyDataSetChanged();
 
-                travelCommunityViewModel.addTravelCommunity(duration, destination, accommodations, diningReservation, notes);
+                travelCommunityViewModel.addTravelCommunity(duration, destination,
+                        accommodations, diningReservation, notes);
 
                 dialog.dismiss();
             } catch (Exception e) {
