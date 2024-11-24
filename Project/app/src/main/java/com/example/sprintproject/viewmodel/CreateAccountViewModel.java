@@ -13,7 +13,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.example.sprintproject.viewmodel.TravelCommunityViewModel;
 
 
 import java.util.ArrayList;
