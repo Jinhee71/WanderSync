@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import com.example.sprintproject.model.Destination;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.Accommodation;
+import com.example.sprintproject.model.TravelCommunity;
+import com.example.sprintproject.viewmodel.TravelCommunityViewModel;
+
 
 import org.junit.Test;
 
@@ -145,5 +148,45 @@ public class BrianYangUnitTest2 {
 
         assertEquals("Deluxe", accommodation.getRoomType());
     }
+
+
+    // Travel Community Test Cases
+    @Test
+    public void testCreateTravelCommunityDefault() {
+        TravelCommunity community = new TravelCommunity();
+        assertNotNull(community);
+        assertTrue(community.getTimestamp() > 0);
+    }
+    
+
+    @Test
+    public void testUpdateTravelCommunityFields() {
+        TravelCommunity community = new TravelCommunity();
+        community.setDuration(10);
+        community.setDestination("Rome");
+        community.setAccommodations("Hotel C");
+        community.setDiningReservations("Restaurant D");
+        community.setNotes("Great trip!");
+
+        assertEquals(10, community.getDuration());
+        assertEquals("Rome", community.getDestination());
+        assertEquals("Hotel C", community.getAccommodations());
+        assertEquals("Restaurant D", community.getDiningReservations());
+        assertEquals("Great trip!", community.getNotes());
+    }
+
+    @Test
+    public void testDefaultTimestamp() {
+        TravelCommunity community = new TravelCommunity();
+        assertTrue(community.getTimestamp() > 0);
+    }
+
+
+
+
+
+
+
+
 
 }
