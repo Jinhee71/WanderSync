@@ -64,7 +64,7 @@ public class HyeonjaeUnitTest1 {
     public void testTravelCommunityBasicConstructor(){
         long duration = 7;
         String destination = "Korea";
-        String accommodations = "Hotel365";
+        String accommodations = "SinlaHotel";
         String diningReservations = "Sulbing";
         String notes = "coffee and ice cream were delicious";
         String username = "hkim3169";
