@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Destination;
 import com.example.sprintproject.model.Dining;
+import com.example.sprintproject.model.TravelCommunity;
+import static com.example.sprintproject.model.TravelCommunityFactory.createPost;
 
 import org.junit.Test;
 
@@ -47,4 +49,32 @@ public class HyeonjaeUnitTest1 {
 
         assertEquals("Seoul", accommodation.getLocation());
     }
+
+    @Test
+    public void testCreatePost() {
+        String destination = "Korea";
+        long duration =7;
+
+        TravelCommunity newPost = createPost(destination,duration);
+
+        assertEquals("Destination should match the input",destination, newPost.getDestination());
+        assertEquals("Duration should match the input", duration, newPost.getDuration());
+    }
+    @Test
+    public void testTravelCommunityBasicConstructor(){
+        long duration = 7;
+        String destination = "Korea";
+        String accommodations = "Hotel365";
+        String diningReservations = "Sulbing";
+        String notes = "coffee and ice cream were delicious";
+        String username = "hkim3169";
+
+        TravelCommunity travelCommunity = new TravelCommunity(duration, destination, accommodations,
+                diningReservations, notes, username);
+
+        assertEquals("Duration should match the input", duration, travelCommunity.getDuration());
+        assertEquals("Destination should match the input", destination, travelCommunity.getDestination());
+        assertEquals("Accommodations should match the input", accommodations, travelCommunity.getAccommodations());
+    }
+
 }
