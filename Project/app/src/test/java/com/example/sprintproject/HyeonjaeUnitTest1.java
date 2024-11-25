@@ -75,6 +75,7 @@ public class HyeonjaeUnitTest1 {
         assertEquals("Duration should match the input", duration, travelCommunity.getDuration());
         assertEquals("Destination should match the input", destination, travelCommunity.getDestination());
         assertEquals("Accommodations should match the input", accommodations, travelCommunity.getAccommodations());
+        assertEquals("username should match the input", username, travelCommunity.getUsername());
     }
 
 }
