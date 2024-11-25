@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Destination;
 import com.example.sprintproject.model.Dining;
+import com.example.sprintproject.model.TravelCommunity;
 import com.example.sprintproject.model.User;
 
 import org.junit.Test;
@@ -98,6 +99,23 @@ public class JinheeLeeUnitTest {
         accommodation.setCheckOut(checkOut);
 
         assertEquals(checkOut, accommodation.getCheckOut());
+    }
+
+    @Test
+    public void testTravelCommunitySetDestination() {
+        String destination = "New York";
+        TravelCommunity travelCommunity = new TravelCommunity();
+        travelCommunity.setDestination(destination);
+
+        assertEquals("New York", travelCommunity.getDestination());
+    }
+
+    @Test
+    public void testTravelCommunitySetDuration() {
+        TravelCommunity travelCommunity = new TravelCommunity();
+        travelCommunity.setDuration(6);
+
+        assertEquals(6, travelCommunity.getDuration());
     }
 
 }
