@@ -71,7 +71,8 @@ public class CommunityAdapter extends BaseAdapter {
             View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.trip_info, null);
 
             // Use different variable names for Bottom Sheet
-            TextView bottomSheetDestinationView = bottomSheetView.findViewById(R.id.destination_text);
+            TextView bottomSheetDestinationView =
+                    bottomSheetView.findViewById(R.id.destination_text);
             TextView bottomSheetDurationView = bottomSheetView.findViewById(R.id.duration_text);
             TextView bottomSheetAccView = bottomSheetView.findViewById(R.id.accomodation_text);
             TextView bottomSheetDineView = bottomSheetView.findViewById(R.id.dining_text);
@@ -82,9 +83,9 @@ public class CommunityAdapter extends BaseAdapter {
             bottomSheetDestinationView.setText(travelPost.getDestination());
             bottomSheetDurationView.setText("Duration: " + travelPost.getDuration() + " days");
             bottomSheetAccView.setText("Accomodation: " + travelPost.getAccommodations());
-            bottomSheetDineView.setText("Dining: "+travelPost.getDiningReservations());
+            bottomSheetDineView.setText("Dining: " + travelPost.getDiningReservations());
             bottomSheetTView.setText("Default Transportation");
-            bottomSheetNotesView.setText("Notes: "+travelPost.getNotes());
+            bottomSheetNotesView.setText("Notes: " + travelPost.getNotes());
 
             // Build and show the BottomSheetDialog
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);

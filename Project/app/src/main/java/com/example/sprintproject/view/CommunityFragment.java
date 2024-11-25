@@ -96,7 +96,8 @@ public class CommunityFragment extends Fragment {
                 // Validate required fields
                 if (TextUtils.isEmpty(startDateStr) || TextUtils.isEmpty(endDateStr)
                         || TextUtils.isEmpty(destination)) {
-                    throw new IllegalArgumentException("Start Date, End Date, and Destination are required.");
+                    throw new IllegalArgumentException("Start Date, End Date, "
+                            + "and Destination are required.");
                 }
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
