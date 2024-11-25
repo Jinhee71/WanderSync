@@ -40,7 +40,8 @@ public class TravelCommunityViewModel extends ViewModel {
                                         try {
                                             String notes = document.getString("Notes");
                                             String destination = document.getString("Destination");
-                                            String accommodation = document.getString("Accommodation");
+                                            String accommodation =
+                                                    document.getString("Accommodation");
                                             String dining = document.getString("Dining");
                                             String username = document.getString("Username");
                                             if (username == null || username.isEmpty()) {
@@ -48,25 +49,29 @@ public class TravelCommunityViewModel extends ViewModel {
                                             }
 
                                             long duration = document.getLong("Duration");
-                                            travelCommunities.add(new TravelCommunity(duration, destination, accommodation, dining, notes, username));
+                                            travelCommunities.add(new TravelCommunity(duration,
+                                                    destination, accommodation,
+                                                    dining, notes, username));
                                         } catch (Exception e) {
-                                            Log.w("TravelCommunityViewModel", "Error parsing document: " + document.getId(), e);
+                                            Log.w("TravelCommunityViewModel",
+                                                    "Error parsing document: "
+                                                            + document.getId(), e);
                                         }
                                     }
                                     callback.onFetchComplete(travelCommunities);
                                 })
                                 .addOnFailureListener(e -> {
                                     Log.w("Firestore", "Error loading travel communities", e);
-                                    callback.onFetchComplete(new ArrayList<>()); // Return empty list on error
+                                    callback.onFetchComplete(new ArrayList<>());
                                 });
                     } else {
                         Log.w("Firestore", "No active trip found for user.");
-                        callback.onFetchComplete(new ArrayList<>()); // Return empty list if no trip found
+                        callback.onFetchComplete(new ArrayList<>());
                     }
                 })
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error retrieving user document", e);
-                    callback.onFetchComplete(new ArrayList<>()); // Return empty list on error
+                    callback.onFetchComplete(new ArrayList<>());
                 });
     }
 
@@ -83,8 +88,11 @@ public class TravelCommunityViewModel extends ViewModel {
                 .addOnSuccessListener(userDocument -> {
                     if (userDocument.exists() && userDocument.contains("activeTrip")) {
                         String tripId = userDocument.getString("activeTrip");
-                        String username = userDocument.getString("email"); // Assuming 'email' is used as the username
-                        addTravelCommunityToTrip(duration, destination, accommodation, dining, notes, username, tripId);
+                        String username = userDocument
+                                .getString("email");
+                        addTravelCommunityToTrip(duration, destination,
+                                accommodation, dining,
+                                notes, username, tripId);
                     } else {
                         Log.w("Firestore", "No active trip found for user.");
                     }
@@ -110,7 +118,9 @@ public class TravelCommunityViewModel extends ViewModel {
         db.collection("User").document(userId).get()
                 .addOnSuccessListener(userDocument -> {
                     String username = userDocument.getString("email");
-                    addTravelCommunityToTrip(duration, destination, accommodation, dining, notes, username, tripId);
+                    addTravelCommunityToTrip(duration, destination,
+                            accommodation, dining,
+                            notes, username, tripId);
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error retrieving user document", e));
     }
@@ -129,7 +139,8 @@ public class TravelCommunityViewModel extends ViewModel {
         db.collection("Trip").document(tripId).collection("TravelCommunity")
                 .add(travelCommunityData)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d("Firestore", "Travel Community added with ID: " + documentReference.getId());
+                    Log.d("Firestore",
+                            "Travel Community added with ID: " + documentReference.getId());
                 })
                 .addOnFailureListener(e -> Log.w("Firestore", "Error adding travel community", e));
     }
@@ -145,7 +156,7 @@ public class TravelCommunityViewModel extends ViewModel {
         db.collection("User").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists() && documentSnapshot.contains("email")) {
-                        String username = documentSnapshot.getString("email"); // Assuming 'email' is the username
+                        String username = documentSnapshot.getString("email");
                         callback.onUsernameFetched(username);
                     } else {
                         callback.onUsernameFetched(null);
