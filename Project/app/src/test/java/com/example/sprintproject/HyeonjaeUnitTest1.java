@@ -64,7 +64,7 @@ public class HyeonjaeUnitTest1 {
     public void testTravelCommunityBasicConstructor(){
         long duration = 7;
         String destination = "Korea";
-        String accommodations = "Hotel365";
+        String accommodations = "SinlaHotel";
         String diningReservations = "Sulbing";
         String notes = "coffee and ice cream were delicious";
         String username = "hkim3169";
@@ -75,6 +75,7 @@ public class HyeonjaeUnitTest1 {
         assertEquals("Duration should match the input", duration, travelCommunity.getDuration());
         assertEquals("Destination should match the input", destination, travelCommunity.getDestination());
         assertEquals("Accommodations should match the input", accommodations, travelCommunity.getAccommodations());
+        assertEquals("username should match the input", username, travelCommunity.getUsername());
     }
 
 }
